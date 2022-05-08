@@ -1,7 +1,11 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'package:step_counter/ui/pages/auth/login_page.dart';
 
 import '../../../core/constants/colors.dart';
+import '../../../core/constants/dialogs.dart';
 import '../../../core/routes/route_class.dart';
 import '../home/bottom_navigation_page.dart';
 import '../widgets/form_area.dart';
@@ -44,14 +48,27 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               height: 3.h,
             ),
             MainGradientButton(
-                text: "ONAYLA",
-                onpressed: () {
-                  routes.navigateToWidget(
-                      context, const BottomNavigationPage());
+                text: "RESET PASSWORD",
+                onpressed: () async {
+                  await resetPassword();
                 }),
           ],
         ),
       ),
     );
+  }
+
+  Future resetPassword() async {
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: _email.text.trim());
+      await awesomeDialogWithNavigation(
+          context, "Success", "Sıfırlama linki gönderildi", () {
+        routes.navigateToWidget(context, const LoginPage());
+      }).show();
+    } on FirebaseException catch (e) {
+      await showMyDialog(
+          context, "Error", e.message.toString(), DialogType.ERROR);
+    }
   }
 }

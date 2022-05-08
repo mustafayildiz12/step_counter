@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:step_counter/core/constants/colors.dart';
@@ -10,8 +11,8 @@ import '../home/bottom_navigation_page.dart';
 import '../widgets/form_area.dart';
 import '../widgets/form_password_area.dart';
 import '../widgets/main_gradient_button.dart';
-import '../widgets/oval_icons.dart';
 import '../widgets/text_buttons.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -28,6 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         decoration: const BoxDecoration(
             image: DecorationImage(
@@ -36,10 +38,12 @@ class _LoginPageState extends State<LoginPage> {
                 fit: BoxFit.cover)),
         child: Container(
           decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Colors.black12, Colors.black87])),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.black12, Colors.black87],
+            ),
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
@@ -80,15 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                 MainGradientButton(
                     text: "GİRİŞ YAP",
                     onpressed: () async {
-                      /*
-                      routes.navigateToWidget(
-                          context, const BottomNavigationPage());
-                     */
-                      awesomeDialogWithNavigation(
-                          context, "Success", "Description", () {
-                        routes.navigateToWidget(
-                            context, const BottomNavigationPage());
-                      }).show();
+                      await signIn();
                     }),
                 SizedBox(
                   height: 1.h,
@@ -117,5 +113,18 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future signIn() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _email.text.trim(), password: _password.text.trim());
+      await awesomeDialogWithNavigation(context, "Success", "Login Succes", () {
+        routes.navigateToWidget(context, const BottomNavigationPage());
+      }).show();
+    } on FirebaseException catch (e) {
+      await showMyDialog(
+          context, "Error", e.message.toString(), DialogType.ERROR);
+    }
   }
 }

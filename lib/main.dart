@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:step_counter/core/constants/colors.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'ui/pages/auth/login_page.dart';
-import 'ui/pages/home/bottom_navigation_page.dart';
-import 'ui/pages/widgets/main_gradient_button.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

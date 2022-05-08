@@ -1,8 +1,11 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:step_counter/ui/pages/auth/login_page.dart';
 
 import '../../../core/constants/colors.dart';
+import '../../../core/constants/dialogs.dart';
 import '../../../core/routes/route_class.dart';
 import '../home/bottom_navigation_page.dart';
 import '../widgets/form_area.dart';
@@ -30,6 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
@@ -59,20 +63,21 @@ class _RegisterPageState extends State<RegisterPage> {
             SizedBox(
               height: 3.h,
             ),
+            /*
             FormArea(
               controller: _age,
               labelText: '  Age',
               type: TextInputType.number,
               // prefixIcon: const Icon(Icons.email_outlined),
             ),
+          */
             SizedBox(
               height: 3.h,
             ),
             MainGradientButton(
-                text: "GİRİŞ YAP",
-                onpressed: () {
-                  routes.navigateToWidget(
-                      context, const BottomNavigationPage());
+                text: "KAYIT OL",
+                onpressed: () async {
+                  await register();
                 }),
             SizedBox(
               height: 1.h,
@@ -98,5 +103,19 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
+  }
+
+  Future register() async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: _email.text.trim(), password: _password.text.trim());
+      await awesomeDialogWithNavigation(context, "Success", "Register Succes",
+          () {
+        routes.navigateToWidget(context, const BottomNavigationPage());
+      }).show();
+    } on FirebaseException catch (e) {
+      await showMyDialog(
+          context, "Error", e.message.toString(), DialogType.ERROR);
+    }
   }
 }

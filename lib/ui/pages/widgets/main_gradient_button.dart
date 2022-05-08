@@ -14,7 +14,7 @@ class MainGradientButton extends StatelessWidget {
     return GestureDetector(
       onTap: onpressed,
       child: Container(
-        width: 90.w,
+        width: 100.w,
         height: 7.h,
         alignment: Alignment.center,
         decoration: BoxDecoration(
