@@ -5,6 +5,7 @@ import 'package:step_counter/core/constants/colors.dart';
 import 'package:step_counter/core/routes/route_class.dart';
 import 'package:step_counter/ui/pages/auth/forgot_password.dart';
 import 'package:step_counter/ui/pages/auth/register_page.dart';
+import 'package:translator/translator.dart';
 
 import '../../../core/constants/dialogs.dart';
 import '../home/bottom_navigation_page.dart';
@@ -116,15 +117,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future signIn() async {
+    final translator = GoogleTranslator();
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _email.text.trim(), password: _password.text.trim());
-      await awesomeDialogWithNavigation(context, "Success", "Login Succes", () {
+      await awesomeDialogWithNavigation(context, "BAŞARILI",
+          "Tebrikler.Sırada emailinizi doğrulamanız gerekiyor", () {
         routes.navigateToWidget(context, const BottomNavigationPage());
       }).show();
     } on FirebaseException catch (e) {
+      var translation = await translator.translate(e.message.toString(),
+          from: 'en', to: 'tr');
       await showMyDialog(
-          context, "Error", e.message.toString(), DialogType.ERROR);
+          context, "HATA", translation.toString(), DialogType.ERROR);
     }
   }
 }

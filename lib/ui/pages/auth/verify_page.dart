@@ -9,6 +9,10 @@ import 'package:step_counter/core/constants/dialogs.dart';
 import 'package:step_counter/ui/pages/home/bottom_navigation_page.dart';
 import 'package:step_counter/ui/pages/widgets/main_gradient_button.dart';
 import 'package:step_counter/ui/pages/widgets/oval_icons.dart';
+import 'package:translator/translator.dart';
+
+import '../../../core/routes/route_class.dart';
+import 'login_page.dart';
 
 class VerifyPage extends StatefulWidget {
   const VerifyPage({Key? key}) : super(key: key);
@@ -21,6 +25,7 @@ class _VerifyPageState extends State<VerifyPage> {
   bool isEmailVerified = false;
   Timer? timer;
   final AppColors appColors = AppColors();
+  final translator = GoogleTranslator();
 
   @override
   void dispose() {
@@ -47,7 +52,10 @@ class _VerifyPageState extends State<VerifyPage> {
       final user = FirebaseAuth.instance.currentUser!;
       await user.sendEmailVerification();
     } on FirebaseException catch (e) {
-      showMyDialog(context, "error", e.message.toString(), DialogType.QUESTION);
+      var translation = await translator.translate(e.message.toString(),
+          from: 'en', to: 'tr');
+      await showMyDialog(
+          context, "HATA", translation.toString(), DialogType.QUESTION);
     }
   }
 
@@ -98,9 +106,22 @@ class _VerifyPageState extends State<VerifyPage> {
                   height: 6.h,
                 ),
                 MainGradientButton(
-                    text: "RESEND CODE",
+                    text: "TEKRAR GÖNDER",
                     onpressed: () async {
                       await sendVerificationEmail();
+                    }),
+                SizedBox(
+                  height: 6.h,
+                ),
+                MainGradientButton(
+                    text: "ÇIKIŞ YAP",
+                    onpressed: () async {
+                      await FirebaseAuth.instance.signOut();
+                      await awesomeDialogWithNavigation(
+                          context, "BAŞARILI", "Çıkış yapıldı", () {
+                        NavigationRoutes()
+                            .navigateToWidget(context, const LoginPage());
+                      }).show();
                     })
               ],
             ),

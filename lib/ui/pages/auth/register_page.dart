@@ -4,17 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:step_counter/ui/pages/auth/login_page.dart';
 import 'package:step_counter/ui/pages/auth/verify_page.dart';
+import 'package:translator/translator.dart';
 
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/dialogs.dart';
 import '../../../core/routes/route_class.dart';
-import '../home/bottom_navigation_page.dart';
 import '../widgets/form_area.dart';
 import '../widgets/form_password_area.dart';
 import '../widgets/main_gradient_button.dart';
 import '../widgets/oval_icons.dart';
 import '../widgets/text_buttons.dart';
-import 'forgot_password.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -58,20 +57,12 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             PasswordFormField(
               passwordController: _password,
-              labelText: 'Password',
+              labelText: 'Şifre',
               prefixIcon: const Icon(Icons.lock),
             ),
             SizedBox(
               height: 3.h,
             ),
-            /*
-            FormArea(
-              controller: _age,
-              labelText: '  Age',
-              type: TextInputType.number,
-              // prefixIcon: const Icon(Icons.email_outlined),
-            ),
-          */
             SizedBox(
               height: 3.h,
             ),
@@ -107,16 +98,19 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future register() async {
+    final translator = GoogleTranslator();
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _email.text.trim(), password: _password.text.trim());
-      await awesomeDialogWithNavigation(context, "Success", "Register Succes",
+      await awesomeDialogWithNavigation(context, "BAŞARILI", "Kayıt Başarılı",
           () {
         routes.navigateToWidget(context, const VerifyPage());
       }).show();
     } on FirebaseException catch (e) {
+      var translation = await translator.translate(e.message.toString(),
+          from: 'en', to: 'tr');
       await showMyDialog(
-          context, "Error", e.message.toString(), DialogType.ERROR);
+          context, "HATA", translation.toString(), DialogType.ERROR);
     }
   }
 }
