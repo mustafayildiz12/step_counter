@@ -21,8 +21,6 @@ class _SplashScreenState extends State<SplashScreen> {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            Future.delayed(const Duration(seconds: 3));
-
             return const BottomNavigationPage();
           }
           return const LoginPage();

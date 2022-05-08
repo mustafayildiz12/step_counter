@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:step_counter/core/constants/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:step_counter/ui/pages/auth/verify_page.dart';
+import 'package:step_counter/ui/pages/home/bottom_navigation_page.dart';
+import 'package:step_counter/ui/pages/splash/splash_screen.dart';
 
 import 'ui/pages/auth/login_page.dart';
 
@@ -23,10 +26,11 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(
+            appBarTheme: AppBarTheme(backgroundColor: appColors.darkGreen),
             scaffoldBackgroundColor: appColors.scaffoldBack,
             primarySwatch: Colors.blue,
           ),
-          home: const LoginPage(),
+          home: const BottomNavigationPage(),
         );
       }),
     );

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:pedometer/pedometer.dart';
 
+import '../../../core/constants/colors.dart';
+
 class WorkPage extends StatefulWidget {
   const WorkPage({Key? key}) : super(key: key);
 
@@ -14,6 +16,7 @@ class _WorkPageState extends State<WorkPage> {
   late Stream<PedestrianStatus> _pedestrianStatusStream;
   String _status = '?';
   int _steps = 0;
+  final AppColors appColors = AppColors();
 
   @override
   void initState() {

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:step_counter/core/constants/colors.dart';
 import 'package:step_counter/core/constants/dialogs.dart';
 import 'package:step_counter/core/routes/route_class.dart';
 import 'package:step_counter/ui/pages/auth/login_page.dart';
@@ -14,6 +15,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final user = FirebaseAuth.instance.currentUser!;
+  final AppColors appColors = AppColors();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +33,13 @@ class _HomePageState extends State<HomePage> {
                         .navigateToWidget(context, const LoginPage());
                   }).show();
                 }),
-            Text(user.email.toString())
+            Text(
+              user.email.toString(),
+              style: Theme.of(context)
+                  .textTheme
+                  .headline5
+                  ?.copyWith(color: appColors.whiteColor),
+            )
           ],
         ),
       ),

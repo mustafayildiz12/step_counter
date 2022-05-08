@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:step_counter/ui/pages/auth/login_page.dart';
+import 'package:step_counter/ui/pages/auth/verify_page.dart';
 
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/dialogs.dart';
@@ -111,7 +112,7 @@ class _RegisterPageState extends State<RegisterPage> {
           email: _email.text.trim(), password: _password.text.trim());
       await awesomeDialogWithNavigation(context, "Success", "Register Succes",
           () {
-        routes.navigateToWidget(context, const BottomNavigationPage());
+        routes.navigateToWidget(context, const VerifyPage());
       }).show();
     } on FirebaseException catch (e) {
       await showMyDialog(
