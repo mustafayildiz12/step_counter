@@ -82,7 +82,7 @@ class _WorkPageState extends State<WorkPage> {
           onPressed: () {
             refreshData();
           },
-          child: Icon(Icons.refresh),
+          child: const Icon(Icons.refresh),
         ),
         appBar: AppBar(
           title: const Text('Pedometer example app'),
