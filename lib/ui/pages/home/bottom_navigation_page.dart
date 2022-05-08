@@ -31,6 +31,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
   }
 
   final AppColors appColors = AppColors();
+  final AppTexts appTexts = AppTexts();
 
   SnakeBarBehaviour snakeBarStyle = SnakeBarBehaviour.floating;
   EdgeInsets padding = EdgeInsets.zero;
@@ -69,18 +70,18 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
             color: appColors.blackColor,
             fontSize: 9.sp,
             fontWeight: FontWeight.bold),
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            label: AppTexts.home,
-            icon: Icon(Icons.home),
+            label: appTexts.home,
+            icon: const Icon(Icons.home),
           ),
           BottomNavigationBarItem(
-            label: AppTexts.work,
-            icon: Icon(Icons.fitness_center),
+            label: appTexts.work,
+            icon: const Icon(Icons.fitness_center),
           ),
           BottomNavigationBarItem(
-            label: AppTexts.profile,
-            icon: Icon(CupertinoIcons.person),
+            label: appTexts.profile,
+            icon: const Icon(CupertinoIcons.person),
           )
         ],
       ),

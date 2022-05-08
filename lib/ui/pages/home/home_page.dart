@@ -26,9 +26,9 @@ class _HomePageState extends State<HomePage> {
           children: [
             MainGradientButton(
                 text: "ÇIKIŞ YAP",
-                onpressed: () {
+                onpressed: () async {
                   FirebaseAuth.instance.signOut();
-                  awesomeDialogWithNavigation(
+                  await awesomeDialogWithNavigation(
                       context, "BAŞARILI", "Çıkış yapıldı", () {
                     NavigationRoutes()
                         .navigateToWidget(context, const LoginPage());

@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:step_counter/core/constants/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:step_counter/ui/pages/auth/verify_page.dart';
-import 'package:step_counter/ui/pages/home/bottom_navigation_page.dart';
+import 'package:step_counter/ui/pages/splash/controller_screen.dart';
 import 'package:step_counter/ui/pages/splash/splash_screen.dart';
-
-import 'ui/pages/auth/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +27,7 @@ class MyApp extends StatelessWidget {
             scaffoldBackgroundColor: appColors.scaffoldBack,
             primarySwatch: Colors.blue,
           ),
-          home: const BottomNavigationPage(),
+          home: const SplashScreen(),
         );
       }),
     );

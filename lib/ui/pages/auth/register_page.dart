@@ -45,7 +45,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             OvalIcons(color: appColors.endBlue, size: 125.sp),
             SizedBox(
-              height: 9.h,
+              height: MediaQuery.of(context).viewInsets.bottom == 0 ? 9.h : 5.h,
             ),
             FormArea(
               controller: _email,

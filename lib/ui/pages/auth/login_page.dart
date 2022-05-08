@@ -29,86 +29,91 @@ class _LoginPageState extends State<LoginPage> {
   final NavigationRoutes routes = NavigationRoutes();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Container(
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: NetworkImage(
-                    'https://s1.1zoom.me/b3241/952/Blonde_girl_Workout_Run_527364_1080x1920.jpg'),
-                fit: BoxFit.cover)),
-        child: Container(
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Container(
           decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.black12, Colors.black87],
+              image: DecorationImage(
+                  image: NetworkImage(
+                      'https://s1.1zoom.me/b3241/952/Blonde_girl_Workout_Run_527364_1080x1920.jpg'),
+                  fit: BoxFit.cover)),
+          child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.black12, Colors.black87],
+              ),
             ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 40.h,
-                ),
-                FormArea(
-                  controller: _email,
-                  labelText: 'Email',
-                  prefixIcon: const Icon(Icons.email_outlined),
-                ),
-                SizedBox(
-                  height: 3.h,
-                ),
-                PasswordFormField(
-                  passwordController: _password,
-                  labelText: 'Password',
-                  prefixIcon: const Icon(Icons.lock),
-                ),
-                SizedBox(
-                  height: 1.h,
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: AppTextButton(
-                    onpressed: () {
-                      routes.navigateToWidget(context, const ForgotPassword());
-                    },
-                    text: "Şifremi Unuttum ?",
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).viewInsets.bottom == 0
+                        ? 40.h
+                        : 25.h,
                   ),
-                ),
-                SizedBox(
-                  height: 1.h,
-                ),
-                MainGradientButton(
-                    text: "GİRİŞ YAP",
-                    onpressed: () async {
-                      await signIn();
-                    }),
-                SizedBox(
-                  height: 1.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Hesabım yok ?",
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelLarge
-                          ?.copyWith(color: appColors.whiteColor),
+                  FormArea(
+                    controller: _email,
+                    labelText: 'Email',
+                    prefixIcon: const Icon(Icons.email_outlined),
+                  ),
+                  SizedBox(
+                    height: 3.h,
+                  ),
+                  PasswordFormField(
+                    passwordController: _password,
+                    labelText: 'Password',
+                    prefixIcon: const Icon(Icons.lock),
+                  ),
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: AppTextButton(
+                      onpressed: () {
+                        routes.navigateToWidget(
+                            context, const ForgotPassword());
+                      },
+                      text: "Şifremi Unuttum ?",
                     ),
-                    AppTextButton(
-                        onpressed: () {
-                          routes.navigateToWidget(
-                              context, const RegisterPage());
-                        },
-                        text: "Kayıt ol"),
-                  ],
-                )
-              ],
+                  ),
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  MainGradientButton(
+                      text: "GİRİŞ YAP",
+                      onpressed: () async {
+                        await signIn();
+                      }),
+                  SizedBox(
+                    height: 1.h,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Hesabım yok ?",
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelLarge
+                            ?.copyWith(color: appColors.whiteColor),
+                      ),
+                      AppTextButton(
+                          onpressed: () {
+                            routes.navigateToWidget(
+                                context, const RegisterPage());
+                          },
+                          text: "Kayıt ol"),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -121,8 +126,8 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _email.text.trim(), password: _password.text.trim());
-      await awesomeDialogWithNavigation(context, "BAŞARILI",
-          "Tebrikler.Sırada emailinizi doğrulamanız gerekiyor", () {
+      await awesomeDialogWithNavigation(
+          context, "BAŞARILI", "Tebrikler.Giriş başarılı", () {
         routes.navigateToWidget(context, const BottomNavigationPage());
       }).show();
     } on FirebaseException catch (e) {
