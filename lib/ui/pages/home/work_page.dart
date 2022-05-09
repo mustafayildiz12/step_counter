@@ -87,9 +87,6 @@ class _WorkPageState extends State<WorkPage> {
           },
           child: const Icon(Icons.refresh),
         ),
-        appBar: AppBar(
-          title: const Text('Pedometer example app'),
-        ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

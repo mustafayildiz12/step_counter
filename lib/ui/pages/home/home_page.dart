@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:step_counter/core/constants/colors.dart';
@@ -5,6 +6,7 @@ import 'package:step_counter/core/constants/dialogs.dart';
 import 'package:step_counter/core/routes/route_class.dart';
 import 'package:step_counter/ui/pages/auth/login_page.dart';
 import 'package:step_counter/ui/pages/widgets/main_gradient_button.dart';
+import 'package:step_counter/ui/pages/widgets/radial_step_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,6 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final user = FirebaseAuth.instance.currentUser!;
   final AppColors appColors = AppColors();
+  final NavigationRoutes routes = NavigationRoutes();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,15 +27,12 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const RadialStepBar(),
             MainGradientButton(
                 text: "ÇIKIŞ YAP",
                 onpressed: () async {
-                  FirebaseAuth.instance.signOut();
-                  await awesomeDialogWithNavigation(
-                      context, "BAŞARILI", "Çıkış yapıldı", () {
-                    NavigationRoutes()
-                        .navigateToWidget(context, const LoginPage());
-                  }).show();
+                  await FirebaseAuth.instance.signOut();
+                  await routes.navigateToFuture(context, const LoginPage());
                 }),
             Text(
               user.email.toString(),

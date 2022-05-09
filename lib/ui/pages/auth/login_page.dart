@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
           decoration: const BoxDecoration(
               image: DecorationImage(
                   image: NetworkImage(
-                      'https://s1.1zoom.me/b3241/952/Blonde_girl_Workout_Run_527364_1080x1920.jpg'),
+                      'https://i.pinimg.com/originals/30/59/8d/30598d2d0ecff7884fe04fdece3bf6e6.jpg'),
                   fit: BoxFit.cover)),
           child: Container(
             decoration: const BoxDecoration(
@@ -48,71 +48,74 @@ class _LoginPageState extends State<LoginPage> {
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).viewInsets.bottom == 0
-                        ? 40.h
-                        : 25.h,
-                  ),
-                  FormArea(
-                    controller: _email,
-                    labelText: 'Email',
-                    prefixIcon: const Icon(Icons.email_outlined),
-                  ),
-                  SizedBox(
-                    height: 3.h,
-                  ),
-                  PasswordFormField(
-                    passwordController: _password,
-                    labelText: 'Password',
-                    prefixIcon: const Icon(Icons.lock),
-                  ),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: AppTextButton(
-                      onpressed: () {
-                        routes.navigateToWidget(
-                            context, const ForgotPassword());
-                      },
-                      text: "Şifremi Unuttum ?",
-                    ),
-                  ),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  MainGradientButton(
-                      text: "GİRİŞ YAP",
-                      onpressed: () async {
-                        await signIn();
-                      }),
-                  SizedBox(
-                    height: 1.h,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        "Hesabım yok ?",
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelLarge
-                            ?.copyWith(color: appColors.whiteColor),
+                      SizedBox(
+                          height: MediaQuery.of(context).viewInsets.bottom == 0
+                              ? 40.h
+                              : 25.h),
+                      FormArea(
+                        controller: _email,
+                        labelText: 'Email',
+                        prefixIcon: const Icon(Icons.email_outlined),
                       ),
-                      AppTextButton(
+                      SizedBox(
+                        height: 3.h,
+                      ),
+                      PasswordFormField(
+                        passwordController: _password,
+                        labelText: 'Password',
+                        prefixIcon: const Icon(Icons.lock),
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: AppTextButton(
                           onpressed: () {
                             routes.navigateToWidget(
-                                context, const RegisterPage());
+                                context, const ForgotPassword());
                           },
-                          text: "Kayıt ol"),
+                          text: "Şifremi Unuttum ?",
+                        ),
+                      ),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      MainGradientButton(
+                          text: "GİRİŞ YAP",
+                          onpressed: () async {
+                            await signIn();
+                          }),
+                      SizedBox(
+                        height: 1.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Hesabım yok ?",
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(color: appColors.whiteColor),
+                          ),
+                          AppTextButton(
+                              onpressed: () {
+                                routes.navigateToWidget(
+                                    context, const RegisterPage());
+                              },
+                              text: "Kayıt ol"),
+                        ],
+                      )
                     ],
-                  )
-                ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -126,10 +129,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _email.text.trim(), password: _password.text.trim());
-      await awesomeDialogWithNavigation(
-          context, "BAŞARILI", "Tebrikler.Giriş başarılı", () {
-        routes.navigateToWidget(context, const BottomNavigationPage());
-      }).show();
+      await routes.navigateToFuture(context, const BottomNavigationPage());
     } on FirebaseException catch (e) {
       var translation = await translator.translate(e.message.toString(),
           from: 'en', to: 'tr');

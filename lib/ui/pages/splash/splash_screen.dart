@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
     SchedulerBinding.instance!.addPostFrameCallback((_) {
       // you can use "context" here, for example:
 
-      Future.delayed(const Duration(seconds: 5))
+      Future.delayed(const Duration(seconds: 3))
           .then((value) => checkFirstSeen());
     });
   }

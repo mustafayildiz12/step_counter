@@ -6,4 +6,10 @@ class NavigationRoutes {
       return widget;
     }));
   }
+
+  Future<void> navigateToFuture(BuildContext context, Widget widget) async {
+    await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return widget;
+    }));
+  }
 }

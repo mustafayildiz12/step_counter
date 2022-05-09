@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:step_counter/core/constants/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:step_counter/ui/pages/splash/controller_screen.dart';
 import 'package:step_counter/ui/pages/splash/splash_screen.dart';
 
 void main() async {

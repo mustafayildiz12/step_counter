@@ -35,13 +35,12 @@ Future<AwesomeDialog> showMyDialogTranslate(BuildContext context, String title,
 AwesomeDialog awesomeDialogWithNavigation(
     BuildContext context, String title, String desc, Function function) {
   return AwesomeDialog(
-      context: context,
-      dialogType: DialogType.SUCCES,
-      animType: AnimType.BOTTOMSLIDE,
-      title: title,
-      desc: desc,
-      dismissOnTouchOutside: false,
-      btnOkOnPress: () {
-        function();
-      });
+    context: context,
+    dialogType: DialogType.SUCCES,
+    animType: AnimType.BOTTOMSLIDE,
+    title: title,
+    desc: desc,
+    dismissOnTouchOutside: false,
+    btnOkOnPress: () => function,
+  );
 }
