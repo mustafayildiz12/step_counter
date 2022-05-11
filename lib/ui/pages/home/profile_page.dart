@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -28,6 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   PlatformFile? pickedFile;
   UploadTask? uploadTask;
+  String? downloadUrl;
 
   Future uploadFile() async {
     final path = 'files/${user.email}/${user.uid}';
@@ -38,10 +38,12 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       uploadTask = ref.putFile(file);
     });
-    final snapshot = await uploadTask!.whenComplete(() => null);
+    final snapshot = await uploadTask!.whenComplete(() {
+      setState(() {});
+    });
 
-    final donwloadUrl = await snapshot.ref.getDownloadURL();
-    print(donwloadUrl);
+    final uploadedUrl = await snapshot.ref.getDownloadURL();
+    print(uploadedUrl);
     setState(() {
       uploadTask = null;
     });
@@ -53,7 +55,25 @@ class _ProfilePageState extends State<ProfilePage> {
 
     setState(() {
       pickedFile = result.files.first;
-      print(user.uid);
+    });
+  }
+
+  @override
+  void initState() {
+    checkProfileImage();
+    super.initState();
+  }
+
+  checkProfileImage() async {
+    String currentUrl = await FirebaseStorage.instance
+        .ref()
+        .child("files")
+        .child(user.email!)
+        .child(user.uid)
+        .getDownloadURL();
+
+    setState(() {
+      downloadUrl = currentUrl;
     });
   }
 
@@ -85,7 +105,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           )
                         : CircleAvatar(
                             radius: 24.w,
-                            backgroundImage: NetworkImage(_profile),
+                            backgroundImage: NetworkImage(
+                                downloadUrl != null ? downloadUrl! : _profile),
                             backgroundColor: Colors.transparent,
                           ),
                     Row(
@@ -114,7 +135,9 @@ class _ProfilePageState extends State<ProfilePage> {
             ListTile(
               leading: CircleAvatar(
                 radius: 5.w,
-                backgroundImage: NetworkImage(_profile),
+                backgroundImage: downloadUrl != null
+                    ? NetworkImage(downloadUrl!)
+                    : NetworkImage(_profile),
                 backgroundColor: Colors.transparent,
               ),
               title: Text(
@@ -235,48 +258,4 @@ class _ProfilePageState extends State<ProfilePage> {
           height: 50,
         );
       });
-}
-
-class AddProfileBox extends StatelessWidget {
-  const AddProfileBox({
-    Key? key,
-    required this.appColors,
-    required String profile,
-  })  : _profile = profile,
-        super(key: key);
-
-  final AppColors appColors;
-  final String _profile;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 100.w,
-      height: 35.h,
-      decoration: BoxDecoration(color: appColors.scaffoldBack),
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        CircleAvatar(
-          radius: 24.w,
-          backgroundImage: NetworkImage(_profile),
-          backgroundColor: Colors.transparent,
-        ),
-        Row(
-          children: [
-            IconButton(
-                onPressed: () => print("zaza"),
-                icon: Icon(
-                  Icons.upload,
-                  color: appColors.whiteColor,
-                )),
-            IconButton(
-                onPressed: () => print("zaza"),
-                icon: Icon(
-                  Icons.download,
-                  color: appColors.whiteColor,
-                )),
-          ],
-        ),
-      ]),
-    );
-  }
 }
