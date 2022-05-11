@@ -1,6 +1,15 @@
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../../core/constants/colors.dart';
+import '../../../core/routes/route_class.dart';
+import '../auth/login_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -11,17 +20,263 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final AppColors appColors = AppColors();
+  final user = FirebaseAuth.instance.currentUser!;
+  final String _profile =
+      "https://floodhomesinc.com/wp-content/uploads/2016/12/male-profile-image-placeholder.png";
+
+  final NavigationRoutes routes = NavigationRoutes();
+
+  PlatformFile? pickedFile;
+  UploadTask? uploadTask;
+
+  Future uploadFile() async {
+    final path = 'files/${user.email}/${user.uid}';
+    final file = File(pickedFile!.path!);
+
+    final ref = FirebaseStorage.instance.ref().child(path);
+
+    setState(() {
+      uploadTask = ref.putFile(file);
+    });
+    final snapshot = await uploadTask!.whenComplete(() => null);
+
+    final donwloadUrl = await snapshot.ref.getDownloadURL();
+    print(donwloadUrl);
+    setState(() {
+      uploadTask = null;
+    });
+  }
+
+  Future selectImage() async {
+    final result = await FilePicker.platform.pickFiles();
+    if (result == null) return;
+
+    setState(() {
+      pickedFile = result.files.first;
+      print(user.uid);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-          child: Text(
-        "Profile Page",
-        style: Theme.of(context)
-            .textTheme
-            .headline5
-            ?.copyWith(color: appColors.whiteColor),
+    ThemeData themeData = Theme.of(context);
+    TextStyle? textStyle =
+        themeData.textTheme.bodyMedium?.copyWith(color: appColors.whiteColor);
+
+    return SafeArea(
+      child: Scaffold(
+          body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 3.w),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              width: 100.w,
+              height: 35.h,
+              decoration: BoxDecoration(color: appColors.scaffoldBack),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    pickedFile != null
+                        ? Image.file(
+                            File(pickedFile!.path!),
+                            width: 24.w,
+                            fit: BoxFit.cover,
+                          )
+                        : CircleAvatar(
+                            radius: 24.w,
+                            backgroundImage: NetworkImage(_profile),
+                            backgroundColor: Colors.transparent,
+                          ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              uploadFile();
+                            },
+                            icon: Icon(
+                              Icons.upload,
+                              color: appColors.whiteColor,
+                            )),
+                        IconButton(
+                            onPressed: () {
+                              selectImage();
+                            },
+                            icon: Icon(
+                              Icons.select_all,
+                              color: appColors.whiteColor,
+                            )),
+                      ],
+                    ),
+                  ]),
+            ),
+            ListTile(
+              leading: CircleAvatar(
+                radius: 5.w,
+                backgroundImage: NetworkImage(_profile),
+                backgroundColor: Colors.transparent,
+              ),
+              title: Text(
+                "Zorro",
+                style: textStyle,
+              ),
+            ),
+            ListTile(
+              onTap: selectImage,
+              leading: Icon(
+                Icons.email,
+                size: 25.sp,
+                color: appColors.whiteColor,
+              ),
+              title: Text(
+                user.email ?? 'Not Found',
+                style: textStyle,
+              ),
+            ),
+            SizedBox(
+              height: 3.h,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 5.w),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Ayarlar",
+                  style: textStyle,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 3.h,
+            ),
+            ListTile(
+              onTap: () {},
+              leading: Icon(
+                Icons.star_border,
+                size: 25.sp,
+                color: appColors.whiteColor,
+              ),
+              title: Text("Oy Ver", style: textStyle),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                size: 14.sp,
+                color: appColors.whiteColor,
+              ),
+            ),
+            ListTile(
+              onTap: () {},
+              leading: Icon(
+                Icons.height,
+                size: 25.sp,
+                color: appColors.whiteColor,
+              ),
+              title: Text("İndex Hesapla", style: textStyle),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                size: 14.sp,
+                color: appColors.whiteColor,
+              ),
+            ),
+            ListTile(
+              onTap: () async {
+                await FirebaseAuth.instance.signOut();
+                await routes.navigateToFuture(context, const LoginPage());
+              },
+              leading: Icon(
+                pickedFile == null ? Icons.exit_to_app : Icons.upload,
+                size: 25.sp,
+                color: appColors.whiteColor,
+              ),
+              title: Text("Çıkış Yap", style: textStyle),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                size: 14.sp,
+                color: appColors.whiteColor,
+              ),
+            ),
+            buildProgress()
+          ],
+        ),
       )),
+    );
+  }
+
+  Widget buildProgress() => StreamBuilder<TaskSnapshot>(
+      stream: uploadTask?.snapshotEvents,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final data = snapshot.data;
+          double progress = data!.bytesTransferred / data.totalBytes;
+
+          return SizedBox(
+            height: 50,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                LinearProgressIndicator(
+                  value: progress,
+                  color: appColors.dialogGreen,
+                ),
+                Center(
+                  child: Text(
+                    '${(100 * progress).roundToDouble()}%',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: appColors.whiteColor),
+                  ),
+                )
+              ],
+            ),
+          );
+        }
+        return SizedBox(
+          height: 50,
+        );
+      });
+}
+
+class AddProfileBox extends StatelessWidget {
+  const AddProfileBox({
+    Key? key,
+    required this.appColors,
+    required String profile,
+  })  : _profile = profile,
+        super(key: key);
+
+  final AppColors appColors;
+  final String _profile;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 100.w,
+      height: 35.h,
+      decoration: BoxDecoration(color: appColors.scaffoldBack),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        CircleAvatar(
+          radius: 24.w,
+          backgroundImage: NetworkImage(_profile),
+          backgroundColor: Colors.transparent,
+        ),
+        Row(
+          children: [
+            IconButton(
+                onPressed: () => print("zaza"),
+                icon: Icon(
+                  Icons.upload,
+                  color: appColors.whiteColor,
+                )),
+            IconButton(
+                onPressed: () => print("zaza"),
+                icon: Icon(
+                  Icons.download,
+                  color: appColors.whiteColor,
+                )),
+          ],
+        ),
+      ]),
     );
   }
 }

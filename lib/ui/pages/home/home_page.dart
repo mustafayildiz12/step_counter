@@ -1,8 +1,6 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:step_counter/core/constants/colors.dart';
-import 'package:step_counter/core/constants/dialogs.dart';
 import 'package:step_counter/core/routes/route_class.dart';
 import 'package:step_counter/ui/pages/auth/login_page.dart';
 import 'package:step_counter/ui/pages/widgets/main_gradient_button.dart';
@@ -19,6 +17,7 @@ class _HomePageState extends State<HomePage> {
   final user = FirebaseAuth.instance.currentUser!;
   final AppColors appColors = AppColors();
   final NavigationRoutes routes = NavigationRoutes();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
