@@ -1,10 +1,13 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'package:step_counter/core/constants/texts.dart';
+import 'package:step_counter/core/model/user_model.dart';
 
 import '../../../core/constants/colors.dart';
 import '../../../core/routes/route_class.dart';
@@ -20,8 +23,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final AppColors appColors = AppColors();
   final user = FirebaseAuth.instance.currentUser!;
-  final String _profile =
-      "https://floodhomesinc.com/wp-content/uploads/2016/12/male-profile-image-placeholder.png";
 
   final NavigationRoutes routes = NavigationRoutes();
 
@@ -44,6 +45,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
     final uploadedUrl = await snapshot.ref.getDownloadURL();
     print(uploadedUrl);
+
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.email)
+        .collection("userInfo")
+        .doc("profile")
+        .update({"profileUrl": uploadedUrl});
     setState(() {
       uploadTask = null;
     });
@@ -61,6 +69,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     checkProfileImage();
+
     super.initState();
   }
 
@@ -105,8 +114,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           )
                         : CircleAvatar(
                             radius: 24.w,
-                            backgroundImage: NetworkImage(
-                                downloadUrl != null ? downloadUrl! : _profile),
+                            backgroundImage: NetworkImage(downloadUrl != null
+                                ? downloadUrl!
+                                : AppTexts().profileUrl),
                             backgroundColor: Colors.transparent,
                           ),
                     Row(
@@ -132,19 +142,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ]),
             ),
-            ListTile(
-              leading: CircleAvatar(
-                radius: 5.w,
-                backgroundImage: downloadUrl != null
-                    ? NetworkImage(downloadUrl!)
-                    : NetworkImage(_profile),
-                backgroundColor: Colors.transparent,
-              ),
-              title: Text(
-                "Zorro",
-                style: textStyle,
-              ),
-            ),
+            StreamBuilder<List<UserModel>>(
+                stream: readUsers(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    var data = snapshot.data;
+
+                    return Text(data![0].name ?? "Name Not Found");
+                  }
+                  return const CircularProgressIndicator();
+                }),
             ListTile(
               onTap: selectImage,
               leading: Icon(
@@ -224,6 +231,14 @@ class _ProfilePageState extends State<ProfilePage> {
       )),
     );
   }
+
+  Stream<List<UserModel>> readUsers() => FirebaseFirestore.instance
+      .collection("users")
+      .doc(user.email!)
+      .collection("userInfo")
+      .snapshots()
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => UserModel.fromJson(doc.data())).toList());
 
   Widget buildProgress() => StreamBuilder<TaskSnapshot>(
       stream: uploadTask?.snapshotEvents,

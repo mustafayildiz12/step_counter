@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'package:step_counter/core/constants/colors.dart';
 import 'package:step_counter/core/routes/route_class.dart';
-import 'package:step_counter/ui/pages/auth/login_page.dart';
-import 'package:step_counter/ui/pages/widgets/main_gradient_button.dart';
-import 'package:step_counter/ui/pages/widgets/radial_step_bar.dart';
+
+import '../../../core/constants/texts.dart';
+import '../../../core/model/user_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -20,29 +22,58 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData themeData = Theme.of(context);
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const RadialStepBar(),
-            MainGradientButton(
-                text: "ÇIKIŞ YAP",
-                onpressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                  await routes.navigateToFuture(context, const LoginPage());
-                }),
-            Text(
-              user.email.toString(),
-              style: Theme.of(context)
-                  .textTheme
-                  .headline5
-                  ?.copyWith(color: appColors.whiteColor),
-            )
-          ],
+        appBar: AppBar(
+          title: const Text("All Users"),
         ),
-      ),
-    );
+        body: StreamBuilder<List<UserModel>>(
+          stream: readUsers(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var users = snapshot.data;
+
+              return ListView.builder(
+                  itemCount: users?.length,
+                  itemBuilder: ((context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        color: appColors.darkGreen,
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            radius: 8.w,
+                            backgroundImage: NetworkImage(
+                                users?[index].profileUrl ??
+                                    AppTexts().profileUrl),
+                            backgroundColor: Colors.transparent,
+                          ),
+                          title: Text(
+                            users?[index].name ?? 'user.name',
+                            style: themeData.textTheme.bodyMedium
+                                ?.copyWith(color: appColors.whiteColor),
+                          ),
+                          subtitle: Text(users?[index].email ?? 'user.email',
+                              style: themeData.textTheme.bodySmall
+                                  ?.copyWith(color: appColors.whiteColor)),
+                        ),
+                      ),
+                    );
+                  }));
+            }
+            if (snapshot.hasError) {
+              print(snapshot.error);
+            }
+            return const CircularProgressIndicator();
+          },
+        ));
   }
+
+  Stream<List<UserModel>> readUsers() => FirebaseFirestore.instance
+      .collection("users")
+      .doc(user.email!)
+      .collection("userInfo")
+      .snapshots()
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => UserModel.fromJson(doc.data())).toList());
 }
