@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:pedometer/pedometer.dart';
 
 import '../../../core/constants/colors.dart';
@@ -13,6 +14,7 @@ class WorkPage extends StatefulWidget {
 
 class _WorkPageState extends State<WorkPage> {
   late Stream<StepCount> _stepCountStream;
+  final user = FirebaseAuth.instance.currentUser!;
   late Stream<PedestrianStatus> _pedestrianStatusStream;
   String _status = '?';
   int _steps = 0;
@@ -82,7 +84,13 @@ class _WorkPageState extends State<WorkPage> {
     return MaterialApp(
       home: Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
+          onPressed: () async {
+            await FirebaseFirestore.instance
+                .collection("users")
+                .doc(user.email)
+                .collection("userInfo")
+                .doc("profile")
+                .update({"step": _steps});
             refreshData();
           },
           child: const Icon(Icons.refresh),

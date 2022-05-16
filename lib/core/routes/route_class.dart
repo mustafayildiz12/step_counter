@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 
 class NavigationRoutes {
   void navigateToWidget(BuildContext context, Widget widget) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return widget;
-    }));
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => widget),
+      (Route<dynamic> route) => false,
+    );
   }
 
   Future<void> navigateToFuture(BuildContext context, Widget widget) async {
-    await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return widget;
-    }));
+    await Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => widget),
+      (Route<dynamic> route) => false,
+    );
   }
 }

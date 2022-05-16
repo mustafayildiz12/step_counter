@@ -29,6 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
   PlatformFile? pickedFile;
   UploadTask? uploadTask;
   String? downloadUrl;
+  var name;
 
   Future uploadFile() async {
     final path = 'files/${user.email}/${user.uid}';
@@ -142,16 +143,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ]),
             ),
-            StreamBuilder<List<UserModel>>(
-                stream: readUsers(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    var data = snapshot.data;
-
-                    return Text(data![0].name ?? "Name Not Found");
-                  }
-                  return const CircularProgressIndicator();
-                }),
+            //  Text(document.collection("name").toString()),
             ListTile(
               onTap: selectImage,
               leading: Icon(

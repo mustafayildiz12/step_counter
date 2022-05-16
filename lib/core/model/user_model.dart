@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final user = userFromJson(jsonString);
-
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,7 +8,13 @@ String userToJson(UserModel data) => json.encode(data.toJson());
 
 class UserModel {
   UserModel(
-      {this.name, this.email, this.uid, this.date, this.pass, this.profileUrl});
+      {this.name,
+      this.step,
+      this.email,
+      this.uid,
+      this.date,
+      this.pass,
+      this.profileUrl});
 
   String? name;
   String? email;
@@ -20,6 +22,7 @@ class UserModel {
   Timestamp? date;
   String? pass;
   String? profileUrl;
+  int? step;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
       name: json["name"],
@@ -27,6 +30,7 @@ class UserModel {
       uid: json["uid"],
       date: json["date"],
       pass: json["pass"],
+      step: json["step"],
       profileUrl: json['profileUrl']);
 
   Map<String, dynamic> toJson() => {
@@ -35,6 +39,7 @@ class UserModel {
         "uid": uid,
         "date": date,
         "pass": pass,
-        "profileUrl": profileUrl
+        "profileUrl": profileUrl,
+        "step": step
       };
 }
