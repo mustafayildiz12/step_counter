@@ -88,8 +88,6 @@ class _WorkPageState extends State<WorkPage> {
             await FirebaseFirestore.instance
                 .collection("users")
                 .doc(user.email)
-                .collection("userInfo")
-                .doc("profile")
                 .update({"step": _steps});
             refreshData();
           },

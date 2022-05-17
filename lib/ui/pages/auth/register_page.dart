@@ -116,12 +116,7 @@ class _RegisterPageState extends State<RegisterPage> {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _email.text.trim(), password: _password.text.trim());
 
-      await firebaseFirestore
-          .collection("users")
-          .doc(_email.text.trim())
-          .collection("userInfo")
-          .doc("profile")
-          .set({
+      await firebaseFirestore.collection("users").doc(_email.text.trim()).set({
         "email": _email.text.trim(),
         "name": _name.text,
         "uid": uid,

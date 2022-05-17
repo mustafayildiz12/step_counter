@@ -5,6 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:sizer/sizer.dart';
 import 'package:step_counter/core/constants/texts.dart';
 import 'package:step_counter/core/model/user_model.dart';
@@ -23,6 +24,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final AppColors appColors = AppColors();
   final user = FirebaseAuth.instance.currentUser!;
+  final _firestore = FirebaseFirestore.instance;
 
   final NavigationRoutes routes = NavigationRoutes();
 
@@ -30,6 +32,8 @@ class _ProfilePageState extends State<ProfilePage> {
   UploadTask? uploadTask;
   String? downloadUrl;
   var name;
+  var logger = Logger();
+  Map<String, dynamic>? userData;
 
   Future uploadFile() async {
     final path = 'files/${user.email}/${user.uid}';
@@ -47,14 +51,25 @@ class _ProfilePageState extends State<ProfilePage> {
     final uploadedUrl = await snapshot.ref.getDownloadURL();
     print(uploadedUrl);
 
-    await FirebaseFirestore.instance
+    await _firestore
         .collection("users")
         .doc(user.email)
-        .collection("userInfo")
-        .doc("profile")
         .update({"profileUrl": uploadedUrl});
     setState(() {
       uploadTask = null;
+    });
+  }
+
+  Future getOneData() async {
+    CollectionReference ref = _firestore.collection("users");
+
+    var profileRef = ref.doc(user.email);
+    var profileData = await profileRef.get();
+    Map<String, dynamic> mapData = profileData.data() as Map<String, dynamic>;
+
+    //  logger.i(mapData['name']);
+    setState(() {
+      userData = mapData;
     });
   }
 
@@ -70,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     checkProfileImage();
-
+    getOneData();
     super.initState();
   }
 
@@ -124,7 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         IconButton(
-                            onPressed: () {
+                            onPressed: () async {
                               uploadFile();
                             },
                             icon: Icon(
@@ -143,7 +158,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ]),
             ),
-            //  Text(document.collection("name").toString()),
+            Text(
+              userData?['name'] ?? "Name not found",
+              style: textStyle,
+            ),
             ListTile(
               onTap: selectImage,
               leading: Icon(
