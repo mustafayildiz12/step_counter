@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 
@@ -11,6 +12,7 @@ import 'package:step_counter/core/constants/texts.dart';
 import 'package:step_counter/core/model/user_model.dart';
 
 import '../../../core/constants/colors.dart';
+import '../../../core/constants/dialogs.dart';
 import '../../../core/routes/route_class.dart';
 import '../auth/login_page.dart';
 
@@ -45,7 +47,10 @@ class _ProfilePageState extends State<ProfilePage> {
       uploadTask = ref.putFile(file);
     });
     final snapshot = await uploadTask!.whenComplete(() {
-      setState(() {});
+      setState(() {
+        showMyDialog(context, "Güncellendi", "Profil fotoğrafınız güncellendi",
+            DialogType.SUCCES);
+      });
     });
 
     final uploadedUrl = await snapshot.ref.getDownloadURL();
@@ -138,29 +143,41 @@ class _ProfilePageState extends State<ProfilePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        IconButton(
-                            onPressed: () async {
-                              uploadFile();
-                            },
-                            icon: Icon(
-                              Icons.upload,
-                              color: appColors.whiteColor,
-                            )),
-                        IconButton(
-                            onPressed: () {
-                              selectImage();
-                            },
-                            icon: Icon(
-                              Icons.select_all,
-                              color: appColors.whiteColor,
-                            )),
+                        Visibility(
+                          visible: pickedFile != null ? true : false,
+                          child: IconButton(
+                              onPressed: () async {
+                                uploadFile();
+                              },
+                              icon: Icon(
+                                Icons.upload,
+                                color: appColors.whiteColor,
+                              )),
+                        ),
+                        Visibility(
+                          visible: pickedFile != null ? false : true,
+                          child: IconButton(
+                              onPressed: () {
+                                selectImage();
+                              },
+                              icon: Icon(
+                                Icons.select_all,
+                                color: appColors.whiteColor,
+                              )),
+                        ),
                       ],
                     ),
                   ]),
             ),
-            Text(
-              userData?['name'] ?? "Name not found",
-              style: textStyle,
+            Padding(
+              padding: EdgeInsets.only(left: 5.w, bottom: 1.h),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  userData?['name'] ?? "Name not found",
+                  style: textStyle,
+                ),
+              ),
             ),
             ListTile(
               onTap: selectImage,
@@ -280,7 +297,7 @@ class _ProfilePageState extends State<ProfilePage> {
           );
         }
         return SizedBox(
-          height: 50,
+          height: 5.h,
         );
       });
 }

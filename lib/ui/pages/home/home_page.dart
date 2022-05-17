@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:sizer/sizer.dart';
 import 'package:step_counter/core/constants/colors.dart';
 import 'package:step_counter/core/routes/route_class.dart';
@@ -34,7 +33,6 @@ class _HomePageState extends State<HomePage> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var users = snapshot.data;
-              Logger().i(users?.first);
 
               return ListView.builder(
                   itemCount: users?.length,
@@ -78,6 +76,7 @@ class _HomePageState extends State<HomePage> {
 
   Stream<List<UserModel>> readUsers() => FirebaseFirestore.instance
       .collection("users")
+      .orderBy("step", descending: true)
       .snapshots()
       .map((snapshot) =>
           snapshot.docs.map((doc) => UserModel.fromJson(doc.data())).toList());
