@@ -18,7 +18,14 @@ class PasswordFormField extends StatefulWidget {
 }
 
 class _PasswordFormFieldState extends State<PasswordFormField> {
-  bool isVisible = false;
+  bool _isVisible = false;
+
+  _changeVisibility() {
+    setState(() {
+      _isVisible = !_isVisible;
+    });
+  }
+
   final AppColors appColors = AppColors();
   @override
   Widget build(BuildContext context) {
@@ -27,7 +34,7 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
       textAlignVertical: TextAlignVertical.center,
       textAlign: TextAlign.left,
       style: TextStyle(fontSize: 9.sp, fontWeight: FontWeight.w500),
-      obscureText: isVisible ? false : true,
+      obscureText: _isVisible,
       controller: widget.passwordController,
       decoration: textFormDecorationPassword(widget.labelText),
     );
@@ -45,14 +52,14 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
       prefixIcon: widget.prefixIcon,
       suffixIcon: IconButton(
         onPressed: () {
-          setState(() {
-            isVisible = !isVisible;
-          });
+          _changeVisibility();
         },
-        icon: Icon(
-          !isVisible ? Icons.visibility_off : Icons.visibility,
-          size: 14.sp,
-          color: AppColors().righturple,
+        icon: AnimatedCrossFade(
+          firstChild: const Icon(Icons.visibility_outlined),
+          secondChild: const Icon(Icons.visibility_off_outlined),
+          duration: const Duration(seconds: 1),
+          crossFadeState:
+              _isVisible ? CrossFadeState.showFirst : CrossFadeState.showSecond,
         ),
       ),
       isDense: true,

@@ -69,7 +69,10 @@ class _HomePageState extends State<HomePage> {
             if (snapshot.hasError) {
               print(snapshot.error);
             }
-            return const CircularProgressIndicator();
+            return Center(
+                child: CircularProgressIndicator(
+              color: appColors.whiteColor,
+            ));
           },
         ));
   }

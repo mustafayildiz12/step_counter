@@ -44,7 +44,22 @@ class _RegisterPageState extends State<RegisterPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: 9.h,
+              height: 4.h,
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                  onPressed: () {
+                    routes.navigateToWidget(context, const LoginPage());
+                  },
+                  icon: Icon(
+                    Icons.arrow_back_outlined,
+                    color: appColors.whiteColor,
+                    size: 20.sp,
+                  )),
+            ),
+            SizedBox(
+              height: 3.h,
             ),
             OvalIcons(color: appColors.endBlue, size: 125.sp),
             SizedBox(

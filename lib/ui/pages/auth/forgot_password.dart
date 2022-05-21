@@ -7,7 +7,6 @@ import 'package:step_counter/ui/pages/auth/login_page.dart';
 import '../../../core/constants/colors.dart';
 import '../../../core/constants/dialogs.dart';
 import '../../../core/routes/route_class.dart';
-import '../home/bottom_navigation_page.dart';
 import '../widgets/form_area.dart';
 import '../widgets/main_gradient_button.dart';
 import '../widgets/oval_icons.dart';
@@ -33,7 +32,22 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: 9.h,
+              height: 4.h,
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                  onPressed: () {
+                    routes.navigateToWidget(context, const LoginPage());
+                  },
+                  icon: Icon(
+                    Icons.arrow_back_outlined,
+                    color: appColors.whiteColor,
+                    size: 20.sp,
+                  )),
+            ),
+            SizedBox(
+              height: 4.h,
             ),
             OvalIcons(color: appColors.startBlue, size: 125.sp),
             SizedBox(

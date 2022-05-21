@@ -25,9 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     SchedulerBinding.instance!.addPostFrameCallback((_) {
-      // you can use "context" here, for example:
-
-      Future.delayed(const Duration(seconds: 3))
+      Future.delayed(const Duration(seconds: 4))
           .then((value) => checkFirstSeen());
     });
   }
@@ -37,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
         body: Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [Lottie.network(appTexts.lottieUrl)],
+      children: [Lottie.network(appTexts.lottiUrl2)],
     ));
   }
 }
