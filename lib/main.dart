@@ -4,8 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:sizer/sizer.dart';
 import 'package:step_counter/core/constants/colors.dart';
 import 'package:firebase_core/firebase_core.dart';
-
-import 'ui/pages/auth/verify_page.dart';
+import 'package:step_counter/ui/pages/splash/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +34,7 @@ class MyApp extends StatelessWidget {
             scaffoldBackgroundColor: appColors.scaffoldBack,
             primarySwatch: Colors.blue,
           ),
-          home: const VerifyPage(),
+          home: const SplashScreen(),
         );
       }),
     );
