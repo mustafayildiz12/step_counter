@@ -18,7 +18,7 @@ class _HomePageState extends HomePageModel {
     ThemeData themeData = Theme.of(context);
     return Scaffold(
         appBar: AppBar(
-          title: const Text("All Users"),
+          title: const Text("Tüm Kullanıcılar"),
           centerTitle: true,
         ),
         body: StreamBuilder<List<UserModel>>(

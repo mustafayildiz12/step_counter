@@ -57,7 +57,7 @@ class _LoginPageState extends LoginModel {
                       ),
                       PasswordFormField(
                         passwordController: password,
-                        labelText: 'Password',
+                        labelText: 'Şifre',
                         prefixIcon: const Icon(Icons.lock),
                       ),
                       SizedBox(

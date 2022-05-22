@@ -8,9 +8,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:sizer/sizer.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/dialogs.dart';
+import '../../../../core/constants/service/notofication_service.dart';
 import '../../../../core/routes/route_class.dart';
 import '../profile_page.dart';
 
@@ -79,8 +81,17 @@ abstract class ProfilePageModel extends State<ProfilePage> {
 
   @override
   void initState() {
+    tz.initializeTimeZones();
     checkProfileImage();
     getOneData();
+    NotificationService()
+        .showNotification(
+          1234,
+          "Yürüme zamanı",
+          "Günlük egzersizini aksatma",
+        )
+        .onError((error, stackTrace) => print(error));
+    print("Bildirim atıldı");
     super.initState();
   }
 

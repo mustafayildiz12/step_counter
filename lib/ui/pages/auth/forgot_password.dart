@@ -55,7 +55,7 @@ class _ForgotPasswordState extends ForgotModel {
               height: 3.h,
             ),
             MainGradientButton(
-                text: "RESET PASSWORD",
+                text: "SIFIRLA",
                 onpressed: () async {
                   await resetPassword();
                 }),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/constants/dialogs.dart';
 
+import '../widgets/main_gradient_button.dart';
 import '../widgets/radial_step_bar.dart';
 import 'view_models.dart/work_page_model.dart';
 
@@ -19,33 +20,12 @@ class _WorkPageState extends WorkPageModel {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: appColors.scaffoldBack,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await FirebaseFirestore.instance
-              .collection("users")
-              .doc(user.email)
-              .update({"step": steps});
-          showMyDialog(
-              context, "BŞARILI", "Puanınız Güncellendi", DialogType.SUCCES);
-          //  stepsBox.delete('steps');
-        },
-        child: const Icon(Icons.refresh),
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             RadialStepBar(
               startStep: steps.toDouble(),
-            ),
-            const Divider(
-              height: 100,
-              thickness: 0,
-              color: Colors.white,
-            ),
-            Text(
-              'Pedestrian status:',
-              style: TextStyle(fontSize: 30, color: appColors.whiteColor),
             ),
             Icon(
               status == 'walking'
@@ -56,14 +36,19 @@ class _WorkPageState extends WorkPageModel {
               size: 100,
               color: appColors.whiteColor,
             ),
-            Center(
-              child: Text(
-                status,
-                style: status == 'walking' || status == 'stopped'
-                    ? const TextStyle(fontSize: 30)
-                    : const TextStyle(fontSize: 20, color: Colors.red),
-              ),
-            )
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: MainGradientButton(
+                  text: "PUANLARI TOPLA",
+                  onpressed: () async {
+                    await FirebaseFirestore.instance
+                        .collection("users")
+                        .doc(user.email)
+                        .update({"step": steps});
+                    showMyDialog(context, "BŞARILI", "Puanınız Güncellendi",
+                        DialogType.SUCCES);
+                  }),
+            ),
           ],
         ),
       ),

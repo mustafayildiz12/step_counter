@@ -5,6 +5,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:pedometer/pedometer.dart';
 
 import '../../../../core/constants/colors.dart';
+import '../../../../core/constants/service/notofication_service.dart';
 import '../work_page.dart';
 
 abstract class WorkPageModel extends State<WorkPage> {
@@ -20,6 +21,14 @@ abstract class WorkPageModel extends State<WorkPage> {
   void initState() {
     super.initState();
     initPlatformState();
+    NotificationService()
+        .showNotification(
+          123456,
+          "Yürüme zamanı",
+          "Hedefe çok yakınsın",
+        )
+        .onError((error, stackTrace) => print(error));
+    print("Bildirim atıldı");
   }
 
   void onStepCount(StepCount event) {

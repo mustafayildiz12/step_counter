@@ -14,7 +14,7 @@ class RadialStepBar extends StatelessWidget {
 
     return SfRadialGauge(
       title: GaugeTitle(
-        text: 'Speedometer',
+        text: 'Atılan Adım',
         textStyle: Theme.of(context)
             .textTheme
             .headline6!
