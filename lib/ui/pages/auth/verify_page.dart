@@ -117,11 +117,8 @@ class _VerifyPageState extends State<VerifyPage> {
                     text: "ÇIKIŞ YAP",
                     onpressed: () async {
                       await FirebaseAuth.instance.signOut();
-                      await awesomeDialogWithNavigation(
-                          context, "BAŞARILI", "Çıkış yapıldı", () {
-                        NavigationRoutes()
-                            .navigateToWidget(context, const LoginPage());
-                      }).show();
+                      NavigationRoutes()
+                          .navigateToFuture(context, const LoginPage());
                     })
               ],
             ),

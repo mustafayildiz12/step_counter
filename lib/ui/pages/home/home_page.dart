@@ -1,12 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import 'package:step_counter/core/constants/colors.dart';
-import 'package:step_counter/core/routes/route_class.dart';
 
 import '../../../core/constants/texts.dart';
 import '../../../core/model/user_model.dart';
+import 'view_models.dart/home_page_model.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,11 +12,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  final user = FirebaseAuth.instance.currentUser!;
-  final AppColors appColors = AppColors();
-  final NavigationRoutes routes = NavigationRoutes();
-
+class _HomePageState extends HomePageModel {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
@@ -76,11 +69,4 @@ class _HomePageState extends State<HomePage> {
           },
         ));
   }
-
-  Stream<List<UserModel>> readUsers() => FirebaseFirestore.instance
-      .collection("users")
-      .orderBy("step", descending: true)
-      .snapshots()
-      .map((snapshot) =>
-          snapshot.docs.map((doc) => UserModel.fromJson(doc.data())).toList());
 }
