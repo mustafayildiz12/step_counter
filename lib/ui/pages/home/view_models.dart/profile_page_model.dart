@@ -13,6 +13,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/dialogs.dart';
 import '../../../../core/constants/service/notofication_service.dart';
+import '../../../../core/manager/local_manager.dart';
 import '../../../../core/routes/route_class.dart';
 import '../profile_page.dart';
 
@@ -20,6 +21,7 @@ abstract class ProfilePageModel extends State<ProfilePage> {
   final AppColors appColors = AppColors();
   final user = FirebaseAuth.instance.currentUser!;
   final _firestore = FirebaseFirestore.instance;
+  final SharedManager manager = SharedManager();
 
   final NavigationRoutes routes = NavigationRoutes();
 
@@ -84,6 +86,7 @@ abstract class ProfilePageModel extends State<ProfilePage> {
     tz.initializeTimeZones();
     checkProfileImage();
     getOneData();
+    manager.init();
     NotificationService()
         .showNotification(
           1234,

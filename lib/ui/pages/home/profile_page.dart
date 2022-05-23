@@ -4,7 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:step_counter/core/constants/texts.dart';
+import 'package:step_counter/ui/futures/save_user_info.dart';
 
+import '../../../core/manager/local_manager.dart';
 import '../auth/login_page.dart';
 import 'view_models.dart/profile_page_model.dart';
 
@@ -117,7 +119,9 @@ class _ProfilePageState extends ProfilePageModel {
               height: 3.h,
             ),
             ListTile(
-              onTap: () {},
+              onTap: () {
+                routes.navigateToWidget(context, const SaveUserInfo());
+              },
               leading: Icon(
                 Icons.star_border,
                 size: 25.sp,
@@ -147,6 +151,7 @@ class _ProfilePageState extends ProfilePageModel {
             ListTile(
               onTap: () async {
                 await FirebaseAuth.instance.signOut();
+                await manager.removeItem(SharedKeys.users);
                 await routes.navigateToFuture(context, const LoginPage());
               },
               leading: Icon(
