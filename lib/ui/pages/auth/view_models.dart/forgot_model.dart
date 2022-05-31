@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:translator/translator.dart';
 
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/dialogs.dart';
@@ -14,6 +15,7 @@ abstract class ForgotModel extends State<ForgotPassword> {
   final NavigationRoutes routes = NavigationRoutes();
 
   Future resetPassword() async {
+    final translator = GoogleTranslator();
     try {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: email.text.trim());
@@ -22,8 +24,9 @@ abstract class ForgotModel extends State<ForgotPassword> {
         routes.navigateToWidget(context, const LoginPage());
       }).show();
     } on FirebaseException catch (e) {
-      await showMyDialog(
-          context, "Error", e.message.toString(), DialogType.ERROR);
+      var translation = await translator.translate(e.message.toString(),
+          from: 'en', to: 'tr');
+      await showMyDialog(context, "Error", translation.text, DialogType.ERROR);
     }
   }
 }

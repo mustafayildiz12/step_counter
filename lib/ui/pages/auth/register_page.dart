@@ -4,7 +4,7 @@ import 'package:step_counter/ui/pages/auth/login_page.dart';
 
 import '../widgets/form_area.dart';
 import '../widgets/form_password_area.dart';
-import '../widgets/main_gradient_button.dart';
+import '../widgets/loading_widget.dart';
 import '../widgets/oval_icons.dart';
 import '../widgets/text_buttons.dart';
 import 'view_models.dart/register_model.dart';
@@ -76,9 +76,9 @@ class _RegisterPageState extends RegisterModel {
             SizedBox(
               height: 3.h,
             ),
-            MainGradientButton(
-                text: "KAYIT OL",
-                onpressed: () async {
+            LoadingButton(
+                title: "KAYIT OL",
+                onPressed: () async {
                   await register();
                 }),
             SizedBox(

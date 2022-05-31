@@ -3,7 +3,7 @@ import 'package:sizer/sizer.dart';
 import 'package:step_counter/ui/pages/auth/login_page.dart';
 
 import '../widgets/form_area.dart';
-import '../widgets/main_gradient_button.dart';
+import '../widgets/loading_widget.dart';
 import '../widgets/oval_icons.dart';
 import 'view_models.dart/forgot_model.dart';
 
@@ -54,9 +54,9 @@ class _ForgotPasswordState extends ForgotModel {
             SizedBox(
               height: 3.h,
             ),
-            MainGradientButton(
-                text: "SIFIRLA",
-                onpressed: () async {
+            LoadingButton(
+                title: "SIFIRLA",
+                onPressed: () async {
                   await resetPassword();
                 }),
           ],

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:step_counter/ui/pages/auth/forgot_password.dart';
 import 'package:step_counter/ui/pages/auth/register_page.dart';
+import 'package:step_counter/ui/pages/widgets/loading_widget.dart';
 
 import '../widgets/form_area.dart';
 import '../widgets/form_password_area.dart';
-import '../widgets/main_gradient_button.dart';
 import '../widgets/text_buttons.dart';
 
 import 'view_models.dart/login_model.dart';
@@ -76,9 +76,9 @@ class _LoginPageState extends LoginModel {
                       SizedBox(
                         height: 1.h,
                       ),
-                      MainGradientButton(
-                          text: "GİRİŞ YAP",
-                          onpressed: () async {
+                      LoadingButton(
+                          title: "Giriş Yap",
+                          onPressed: () async {
                             await signIn();
                           }),
                       SizedBox(
