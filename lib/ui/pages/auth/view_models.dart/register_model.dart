@@ -1,18 +1,17 @@
+import 'dart:async';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:step_counter/core/manager/cache_manager.dart';
-import 'package:step_counter/core/model/user_model.dart';
 import 'package:translator/translator.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/dialogs.dart';
-import '../../../../core/manager/local_manager.dart';
 import '../../../../core/routes/route_class.dart';
-import '../register_page.dart';
-import '../verify_page.dart';
+import '../views/register_page.dart';
+import '../views/verify_page.dart';
 
 abstract class RegisterModel extends State<RegisterPage> {
   final AppColors appColors = AppColors();
@@ -23,35 +22,27 @@ abstract class RegisterModel extends State<RegisterPage> {
 
   final NavigationRoutes routes = NavigationRoutes();
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   Future register() async {
     final translator = GoogleTranslator();
-    final SharedManager manager = SharedManager();
-    final uid = const Uuid().v4();
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email.text.trim(), password: password.text.trim());
-
-      await firebaseFirestore.collection("users").doc(email.text.trim()).set({
-        "email": email.text.trim(),
-        "name": name.text,
-        "uid": uid,
-        "date": DateTime.now(),
-        "pass": password.text.trim()
+      await firebaseAuth
+          .createUserWithEmailAndPassword(
+              email: email.text.trim(), password: password.text.trim())
+          .then((_) {
+        firebaseFirestore
+            .collection("users")
+            .doc(firebaseAuth.currentUser?.uid)
+            .set({
+          "email": firebaseAuth.currentUser?.email,
+          "name": name.text,
+          "uid": firebaseAuth.currentUser?.uid,
+          "date": DateTime.now(),
+          "pass": password.text.trim(),
+          "step": 0
+        });
       });
-
-      await manager.init().whenComplete(() {
-        userCacheManager = UserCacheManager(manager);
-      });
-
-      await userCacheManager.saveUserData([
-        UserModel(
-            name: name.text,
-            email: email.text.trim(),
-            uid: uid,
-            // date: Timestamp.now(),
-            pass: password.text.trim())
-      ]);
 
       await awesomeDialogWithNavigation(context, "BAŞARILI", "Kayıt Başarılı",
           () {

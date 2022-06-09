@@ -2,11 +2,11 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../../../core/constants/dialogs.dart';
+import '../../../../core/constants/dialogs.dart';
 
-import '../widgets/main_gradient_button.dart';
-import '../widgets/radial_step_bar.dart';
-import 'view_models.dart/work_page_model.dart';
+import '../../widgets/main_gradient_button.dart';
+import '../../widgets/radial_step_bar.dart';
+import '../view_models.dart/work_page_model.dart';
 
 class WorkPage extends StatefulWidget {
   const WorkPage({Key? key}) : super(key: key);

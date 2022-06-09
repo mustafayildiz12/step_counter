@@ -6,9 +6,8 @@ import 'package:sizer/sizer.dart';
 import 'package:step_counter/core/constants/texts.dart';
 import 'package:step_counter/ui/futures/save_user_info.dart';
 
-import '../../../core/manager/local_manager.dart';
-import '../auth/login_page.dart';
-import 'view_models.dart/profile_page_model.dart';
+import '../../auth/views/login_page.dart';
+import '../view_models.dart/profile_page_model.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -85,7 +84,7 @@ class _ProfilePageState extends ProfilePageModel {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  userData?['name'] ?? "Name not found",
+                  userName,
                   style: textStyle,
                 ),
               ),
@@ -151,7 +150,7 @@ class _ProfilePageState extends ProfilePageModel {
             ListTile(
               onTap: () async {
                 await FirebaseAuth.instance.signOut();
-                await manager.removeItem(SharedKeys.users);
+
                 await routes.navigateToFuture(context, const LoginPage());
               },
               leading: Icon(

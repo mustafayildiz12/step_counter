@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import 'package:step_counter/ui/pages/auth/login_page.dart';
+import 'package:step_counter/ui/pages/auth/views/login_page.dart';
 
-import '../widgets/form_area.dart';
-import '../widgets/form_password_area.dart';
-import '../widgets/loading_widget.dart';
-import '../widgets/oval_icons.dart';
-import '../widgets/text_buttons.dart';
-import 'view_models.dart/register_model.dart';
+import '../../widgets/form_area.dart';
+import '../../widgets/form_password_area.dart';
+import '../../widgets/loading_widget.dart';
+import '../../widgets/oval_icons.dart';
+import '../../widgets/text_buttons.dart';
+import '../view_models.dart/register_model.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);

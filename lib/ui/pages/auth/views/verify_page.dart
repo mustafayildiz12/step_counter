@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:step_counter/core/constants/colors.dart';
 import 'package:step_counter/core/constants/dialogs.dart';
-import 'package:step_counter/ui/pages/home/bottom_navigation_page.dart';
+import 'package:step_counter/ui/pages/home/views/bottom_navigation_page.dart';
 import 'package:step_counter/ui/pages/widgets/main_gradient_button.dart';
 import 'package:step_counter/ui/pages/widgets/oval_icons.dart';
 import 'package:translator/translator.dart';
 
-import '../../../core/routes/route_class.dart';
+import '../../../../core/routes/route_class.dart';
 import 'login_page.dart';
 
 class VerifyPage extends StatefulWidget {

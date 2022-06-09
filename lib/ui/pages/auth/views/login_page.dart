@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import 'package:step_counter/ui/pages/auth/forgot_password.dart';
-import 'package:step_counter/ui/pages/auth/register_page.dart';
+import 'package:step_counter/ui/pages/auth/views/forgot_password.dart';
+import 'package:step_counter/ui/pages/auth/views/register_page.dart';
 import 'package:step_counter/ui/pages/widgets/loading_widget.dart';
 
-import '../widgets/form_area.dart';
-import '../widgets/form_password_area.dart';
-import '../widgets/text_buttons.dart';
+import '../../widgets/form_area.dart';
+import '../../widgets/form_password_area.dart';
+import '../../widgets/text_buttons.dart';
 
-import 'view_models.dart/login_model.dart';
+import '../view_models.dart/login_model.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

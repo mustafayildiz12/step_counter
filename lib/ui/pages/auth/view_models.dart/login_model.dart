@@ -8,10 +8,9 @@ import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/dialogs.dart';
 import '../../../../core/manager/cache_manager.dart';
 import '../../../../core/manager/local_manager.dart';
-import '../../../../core/model/user_model.dart';
 import '../../../../core/routes/route_class.dart';
-import '../../home/bottom_navigation_page.dart';
-import '../login_page.dart';
+import '../../home/views/bottom_navigation_page.dart';
+import '../views/login_page.dart';
 
 abstract class LoginModel extends State<LoginPage> {
   final AppColors appColors = AppColors();
@@ -32,14 +31,6 @@ abstract class LoginModel extends State<LoginPage> {
         userCacheManager = UserCacheManager(manager);
       });
 
-      await userCacheManager.saveUserData([
-        UserModel(
-            name: auth.currentUser?.displayName,
-            email: email.text.trim(),
-            uid: auth.currentUser?.uid,
-            // date: Timestamp.now(),
-            pass: password.text.trim())
-      ]);
       await routes.navigateToFuture(context, const BottomNavigationPage());
     } on FirebaseException catch (e) {
       var translation = await translator.translate(e.message.toString(),

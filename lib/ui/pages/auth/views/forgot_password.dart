@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import 'package:step_counter/ui/pages/auth/login_page.dart';
+import 'package:step_counter/ui/pages/auth/views/login_page.dart';
 
-import '../widgets/form_area.dart';
-import '../widgets/loading_widget.dart';
-import '../widgets/oval_icons.dart';
-import 'view_models.dart/forgot_model.dart';
+import '../../widgets/form_area.dart';
+import '../../widgets/loading_widget.dart';
+import '../../widgets/oval_icons.dart';
+import '../view_models.dart/forgot_model.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({Key? key}) : super(key: key);

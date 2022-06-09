@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:step_counter/ui/pages/auth/login_page.dart';
-import 'package:step_counter/ui/pages/home/bottom_navigation_page.dart';
+import 'package:step_counter/ui/pages/auth/views/login_page.dart';
+import 'package:step_counter/ui/pages/home/views/bottom_navigation_page.dart';
 
 class ControllerScreen extends StatefulWidget {
   const ControllerScreen({Key? key}) : super(key: key);

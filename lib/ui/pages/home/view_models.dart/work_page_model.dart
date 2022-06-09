@@ -6,7 +6,7 @@ import 'package:pedometer/pedometer.dart';
 
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/service/notofication_service.dart';
-import '../work_page.dart';
+import '../views/work_page.dart';
 
 abstract class WorkPageModel extends State<WorkPage> {
   late Stream<StepCount> _stepCountStream;

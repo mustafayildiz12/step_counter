@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 import 'package:sizer/sizer.dart';
 import 'package:step_counter/core/constants/colors.dart';
-import 'package:step_counter/ui/pages/home/home_page.dart';
-import 'package:step_counter/ui/pages/home/work_page.dart';
+import 'package:step_counter/ui/pages/home/views/home_page.dart';
+import 'package:step_counter/ui/pages/home/views/work_page.dart';
 
-import '../../../core/constants/texts.dart';
+import '../../../../core/constants/texts.dart';
+import 'friend_list_page.dart';
 import 'profile_page.dart';
 
 class BottomNavigationPage extends StatefulWidget {
@@ -21,6 +22,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
   static final List<Widget> _widgetOptions = <Widget>[
     const HomePage(),
     const WorkPage(),
+    const FriendListPage(),
     const ProfilePage(),
   ];
 
@@ -78,6 +80,10 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
           BottomNavigationBarItem(
             label: appTexts.work,
             icon: const Icon(Icons.fitness_center),
+          ),
+          BottomNavigationBarItem(
+            label: appTexts.chat,
+            icon: const Icon(Icons.chat_bubble_rounded),
           ),
           BottomNavigationBarItem(
             label: appTexts.profile,

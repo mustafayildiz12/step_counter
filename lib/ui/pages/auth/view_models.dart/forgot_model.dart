@@ -6,8 +6,8 @@ import 'package:translator/translator.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/dialogs.dart';
 import '../../../../core/routes/route_class.dart';
-import '../forgot_password.dart';
-import '../login_page.dart';
+import '../views/forgot_password.dart';
+import '../views/login_page.dart';
 
 abstract class ForgotModel extends State<ForgotPassword> {
   final AppColors appColors = AppColors();

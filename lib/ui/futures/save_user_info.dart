@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:step_counter/core/constants/colors.dart';
 import 'package:step_counter/core/model/user_model.dart';
-import 'package:step_counter/ui/pages/home/bottom_navigation_page.dart';
+import 'package:step_counter/ui/pages/home/views/bottom_navigation_page.dart';
 
 import '../../core/manager/cache_manager.dart';
 import '../../core/manager/local_manager.dart';
