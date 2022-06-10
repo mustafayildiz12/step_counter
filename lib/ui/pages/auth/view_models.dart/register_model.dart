@@ -39,6 +39,7 @@ abstract class RegisterModel extends State<RegisterPage> {
           "name": name.text,
           "uid": firebaseAuth.currentUser?.uid,
           "date": DateTime.now(),
+          "profileUrl": "",
           "pass": password.text.trim(),
           "step": 0
         });

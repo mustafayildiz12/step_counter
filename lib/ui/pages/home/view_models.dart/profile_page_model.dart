@@ -50,7 +50,7 @@ abstract class ProfilePageModel extends State<ProfilePage> {
 
     await firestore
         .collection("users")
-        .doc(user.email)
+        .doc(user.uid)
         .update({"profileUrl": uploadedUrl});
     setState(() {
       uploadTask = null;

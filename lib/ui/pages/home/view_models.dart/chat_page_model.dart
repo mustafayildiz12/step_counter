@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:step_counter/core/models/chat_model.dart';
 import 'package:step_counter/ui/pages/home/views/chat_page.dart';
 
 import '../../../../core/routes/route_class.dart';
@@ -12,75 +11,78 @@ abstract class ChatPageModel extends State<ChatPage> {
   TextEditingController t1 = TextEditingController();
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   final NavigationRoutes routes = NavigationRoutes();
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  String? profileUrl;
 
-  Stream<List<ChatModel>> readMessages() => firebaseFirestore
-      .collection("chats")
-      .doc()
-      .collection('messages')
-      .snapshots()
-      .map((snapshot) =>
-          snapshot.docs.map((doc) => ChatModel.fromJson(doc.data())).toList());
-
-  Future<String?> chatId(myId) {
-    Completer<String?> completer = Completer();
-
-    print(widget.uid + " *** " + myId);
-
-    firebaseFirestore
-        .collection('chats')
-        .where("users", isEqualTo: [widget.uid, myId])
-        .get()
-        .then((value) {
-          if (value.size > 0) {
-            completer.complete(value.docs.first.id);
-          } else {
-            completer.complete(null);
-          }
-        })
-        .catchError((err) {
-          completer.complete(null);
-        });
-
-    return completer.future;
+  @override
+  void initState() {
+    super.initState();
+    initImage();
   }
 
-  Future<String> getUserUUID() {
+  Future<String> getProfileImage() {
     Completer<String> completer = Completer();
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-
-    firebaseFirestore.collection("users").doc(uid).get().then((value) {
+    firebaseFirestore.collection("users").doc(widget.uid).get().then((value) {
       if (value.exists) {
-        completer.complete((value.data() as Map)["uid"]);
+        completer.complete((value.data() as Map)["profileUrl"]);
       }
     });
 
     return completer.future;
   }
 
-  sendMessage(chat) async {
-    await firebaseFirestore
-        .collection('chats')
-        .doc(chat)
-        .collection('messages')
-        .add({'uid': widget.uid, 'message': t1.text, 'date': DateTime.now()});
+  initImage() async {
+    String getProfileUrl = await getProfileImage();
+    setState(() {
+      profileUrl = getProfileUrl;
+    });
   }
 
-  send() async {
-    String myId = await getUserUUID();
-    String? chat = await chatId(myId);
-
-    if (chat == null) {
-      await firebaseFirestore.collection('chats').doc().set({
-        "users": [
-          widget.uid,
-          myId,
-        ],
-      }).then((value) {
-        send();
-      });
-    } else {
-      sendMessage(chat);
-    }
+  sendOldMessage() async {
+    await firebaseFirestore
+        .collection("chats")
+        .doc(firebaseAuth.currentUser?.uid)
+        .collection("messages")
+        .doc(widget.uid)
+        .collection("chats")
+        .add({
+      "senderId": firebaseAuth.currentUser?.uid,
+      "receiverId": widget.uid,
+      "message": t1.text,
+      "type": "text",
+      "date": DateTime.now()
+    }).then((value) => {
+              FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(firebaseAuth.currentUser?.uid)
+                  .collection("messages")
+                  .doc(widget.uid)
+                  .set({
+                "last_msg": t1.text,
+              })
+            });
+    await FirebaseFirestore.instance
+        .collection("chats")
+        .doc(widget.uid)
+        .collection("messages")
+        .doc(firebaseAuth.currentUser?.uid)
+        .collection("chats")
+        .add({
+      "senderId": firebaseAuth.currentUser?.uid,
+      "receiverId": widget.uid,
+      "message": t1.text,
+      "type": "text",
+      "date": DateTime.now()
+    }).then((value) => {
+              FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(widget.uid)
+                  .collection("messages")
+                  .doc(firebaseAuth.currentUser?.uid)
+                  .set({
+                "last_msg": t1.text,
+              })
+            });
     t1.clear();
   }
 }
