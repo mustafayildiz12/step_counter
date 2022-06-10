@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-import 'package:step_counter/core/model/user_model.dart';
-
+import '../models/user_model.dart';
 import 'local_manager.dart';
 
 class UserCacheManager {

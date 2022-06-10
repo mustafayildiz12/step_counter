@@ -1,8 +1,8 @@
-import 'dart:async';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:step_counter/core/models/chat_model.dart';
+
+import '../view_models.dart/chat_page_model.dart';
+import 'bottom_navigation_page.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key, required this.uid}) : super(key: key);
@@ -13,10 +13,7 @@ class ChatPage extends StatefulWidget {
   State<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
-  TextEditingController t1 = TextEditingController();
-  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-
+class _ChatPageState extends ChatPageModel {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,27 +23,48 @@ class _ChatPageState extends State<ChatPage> {
             Icons.arrow_back_ios,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            routes.navigateToWidget(context, const BottomNavigationPage());
           },
         ),
       ),
       body: Column(
         children: [
           Expanded(
-            child: Container(
-              color: Colors.blue,
-            ),
-          ),
+              child: StreamBuilder<List<ChatModel>>(
+                  stream: readMessages(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var messages = snapshot.data;
+                      print(messages?.length);
+
+                      return ListView.builder(
+                          itemCount: messages?.length,
+                          itemBuilder: ((context, index) {
+                            return Text(
+                              messages?[0].message ?? 'empty message',
+                              style: const TextStyle(color: Colors.white),
+                            );
+                          }));
+                    } else if (snapshot.hasError) {
+                      print(snapshot.error);
+                    }
+                    return const CircularProgressIndicator();
+                  })),
           Row(
             children: [
               Expanded(
                 child: TextFormField(
                   controller: t1,
+                  decoration: const InputDecoration(
+                      filled: true, fillColor: Colors.amber),
                   style: const TextStyle(color: Colors.white),
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.send),
+                icon: const Icon(
+                  Icons.send,
+                  color: Colors.blueGrey,
+                ),
                 onPressed: () {
                   send();
                 },
@@ -56,67 +74,5 @@ class _ChatPageState extends State<ChatPage> {
         ],
       ),
     );
-  }
-
-  Future<String?> chatId(myId) {
-    Completer<String?> completer = Completer();
-
-    print(widget.uid + " *** " + myId);
-
-    firebaseFirestore
-        .collection('chats')
-        .where("users", isEqualTo: [widget.uid, myId])
-        .get()
-        .then((value) {
-          if (value.size > 0) {
-            completer.complete(value.docs.first.id);
-          } else {
-            completer.complete(null);
-          }
-        })
-        .catchError((err) {
-          completer.complete(null);
-        });
-
-    return completer.future;
-  }
-
-  Future<String> getUserUUID() {
-    Completer<String> completer = Completer();
-    String uid = FirebaseAuth.instance.currentUser!.email!;
-
-    firebaseFirestore.collection("users").doc(uid).get().then((value) {
-      if (value.exists) {
-        completer.complete((value.data() as Map)["uid"]);
-      }
-    });
-
-    return completer.future;
-  }
-
-  sendMessage(chat) async {
-    await firebaseFirestore
-        .collection('chats')
-        .doc(chat)
-        .collection('messages')
-        .add({'uid': widget.uid, 'message': t1.text, 'date': DateTime.now()});
-  }
-
-  send() async {
-    String myId = await getUserUUID();
-    String? chat = await chatId(myId);
-
-    if (chat == null) {
-      await firebaseFirestore.collection('chats').doc().set({
-        "users": [
-          widget.uid,
-          myId,
-        ],
-      }).then((value) {
-        send();
-      });
-    } else {
-      sendMessage(chat);
-    }
   }
 }

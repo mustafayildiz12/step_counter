@@ -74,7 +74,10 @@ abstract class ProfilePageModel extends State<ProfilePage> {
   }
 
   initName() async {
-    userName = await getName();
+    String getUserName = await getName();
+    setState(() {
+      userName = getUserName;
+    });
   }
 
   checkProfileImage() async {

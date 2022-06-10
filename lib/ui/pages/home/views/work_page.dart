@@ -1,8 +1,4 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../core/constants/dialogs.dart';
 
 import '../../widgets/main_gradient_button.dart';
 import '../../widgets/radial_step_bar.dart';
@@ -40,13 +36,8 @@ class _WorkPageState extends WorkPageModel {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: MainGradientButton(
                   text: "PUANLARI TOPLA",
-                  onpressed: () async {
-                    await FirebaseFirestore.instance
-                        .collection("users")
-                        .doc(user.email)
-                        .update({"step": steps});
-                    showMyDialog(context, "BŞARILI", "Puanınız Güncellendi",
-                        DialogType.SUCCES);
+                  onpressed: () {
+                    updateUserStep();
                   }),
             ),
           ],

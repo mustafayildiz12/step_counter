@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../../core/constants/texts.dart';
-import '../../../../core/model/user_model.dart';
+import '../../../../core/models/user_model.dart';
 import '../view_models.dart/home_page_model.dart';
 
 class HomePage extends StatefulWidget {

@@ -1,3 +1,5 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -5,6 +7,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:pedometer/pedometer.dart';
 
 import '../../../../core/constants/colors.dart';
+import '../../../../core/constants/dialogs.dart';
 import '../../../../core/constants/service/notofication_service.dart';
 import '../views/work_page.dart';
 
@@ -29,6 +32,14 @@ abstract class WorkPageModel extends State<WorkPage> {
         )
         .onError((error, stackTrace) => print(error));
     print("Bildirim atıldı");
+  }
+
+  updateUserStep() async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.uid)
+        .update({"step": steps});
+    showMyDialog(context, "BŞARILI", "Puanınız Güncellendi", DialogType.SUCCES);
   }
 
   void onStepCount(StepCount event) {

@@ -1,13 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'package:step_counter/ui/pages/home/view_models.dart/friend_list_model.dart';
 import 'package:step_counter/ui/pages/home/views/chat_page.dart';
 
-import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/texts.dart';
-import '../../../../core/model/user_model.dart';
-import '../../../../core/routes/route_class.dart';
+import '../../../../core/models/user_model.dart';
 
 class FriendListPage extends StatefulWidget {
   const FriendListPage({Key? key}) : super(key: key);
@@ -16,18 +13,7 @@ class FriendListPage extends StatefulWidget {
   State<FriendListPage> createState() => _FriendListPageState();
 }
 
-class _FriendListPageState extends State<FriendListPage> {
-  final user = FirebaseAuth.instance.currentUser!;
-  final AppColors appColors = AppColors();
-  final NavigationRoutes routes = NavigationRoutes();
-
-  Stream<List<UserModel>> readUsers() => FirebaseFirestore.instance
-      .collection("users")
-      .orderBy("step", descending: true)
-      .snapshots()
-      .map((snapshot) =>
-          snapshot.docs.map((doc) => UserModel.fromJson(doc.data())).toList());
-
+class _FriendListPageState extends FriendListModel {
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
