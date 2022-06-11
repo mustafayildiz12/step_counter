@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'package:step_counter/core/constants/colors.dart';
 import 'package:step_counter/core/constants/texts.dart';
 import 'package:step_counter/ui/pages/home/views/widgets/get_single_message.dart';
 
@@ -19,12 +20,19 @@ class _ChatPageState extends ChatPageModel {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors().ovalRed,
       appBar: AppBar(
+        elevation: 0,
         actions: [
-          CircleAvatar(
-            radius: 5.w,
-            backgroundImage: NetworkImage(profileUrl ?? AppTexts().profileUrl),
-            backgroundColor: Colors.transparent,
+          Center(child: Text(name ?? 'Name is empty')),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 3.w),
+            child: CircleAvatar(
+              radius: 4.w,
+              backgroundImage:
+                  NetworkImage(profileUrl ?? AppTexts().profileUrl),
+              backgroundColor: Colors.transparent,
+            ),
           ),
         ],
         leading: IconButton(
@@ -40,14 +48,7 @@ class _ChatPageState extends ChatPageModel {
         children: [
           Expanded(
               child: StreamBuilder(
-                  stream: firebaseFirestore
-                      .collection("chats")
-                      .doc(firebaseAuth.currentUser?.uid)
-                      .collection('messages')
-                      .doc(widget.uid)
-                      .collection('chats')
-                      .orderBy("date", descending: true)
-                      .snapshots(),
+                  stream: streamMessages(),
                   builder: (context, AsyncSnapshot snapshot) {
                     if (snapshot.hasData) {
                       var messages = snapshot.data.docs;
@@ -73,11 +74,18 @@ class _ChatPageState extends ChatPageModel {
           Row(
             children: [
               Expanded(
-                child: TextFormField(
-                  controller: t1,
-                  decoration: const InputDecoration(
-                      filled: true, fillColor: Colors.amber),
-                  style: const TextStyle(color: Colors.white),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 2.w),
+                  child: TextFormField(
+                    controller: t1,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(3.w)),
+                        filled: true,
+                        fillColor: AppColors().ovalYellow),
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
               Container(
@@ -91,7 +99,10 @@ class _ChatPageState extends ChatPageModel {
                 ),
               )
             ],
-          )
+          ),
+          SizedBox(
+            height: 0.7.h,
+          ),
         ],
       ),
     );

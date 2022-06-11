@@ -45,11 +45,6 @@ abstract class RegisterModel extends State<RegisterPage> {
         });
       });
 
-      await awesomeDialogWithNavigation(context, "BAŞARILI", "Kayıt Başarılı",
-          () {
-        routes.navigateToFuture(context, const VerifyPage());
-      }).show();
-
       await routes.navigateToFuture(context, const VerifyPage());
     } on FirebaseException catch (e) {
       var translation = await translator.translate(e.message.toString(),

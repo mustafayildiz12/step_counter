@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
+import 'package:step_counter/core/constants/colors.dart';
 
 class SignleMessage extends StatelessWidget {
   final String message;
@@ -15,25 +17,29 @@ class SignleMessage extends StatelessWidget {
       mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
         Container(
-          padding: const EdgeInsets.all(16),
-          margin: const EdgeInsets.all(16),
-          constraints: const BoxConstraints(
-            maxWidth: 200,
+          padding: EdgeInsets.all(2.4.w),
+          margin: EdgeInsets.all(2.4.w),
+          constraints: BoxConstraints(
+            maxWidth: 40.h,
           ),
           decoration: BoxDecoration(
-            color: isMe ? Colors.teal : Colors.grey,
-            borderRadius: BorderRadius.circular(12),
+            color: isMe ? AppColors().darkGreen : AppColors().leftPurple,
+            borderRadius: BorderRadius.circular(2.w),
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(message, style: const TextStyle(color: Colors.white)),
-              const SizedBox(
-                height: 2,
+              Padding(
+                padding: EdgeInsets.only(right: 1.w),
+                child:
+                    Text(message, style: const TextStyle(color: Colors.white)),
+              ),
+              SizedBox(
+                height: 1.h,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 45),
+                padding: EdgeInsets.only(right: 1.w),
                 child: Text("${date.toDate().hour}:${date.toDate().minute}",
                     style:
                         TextStyle(color: Colors.grey.shade300, fontSize: 13)),

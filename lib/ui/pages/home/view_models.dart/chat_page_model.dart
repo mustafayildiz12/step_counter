@@ -13,6 +13,7 @@ abstract class ChatPageModel extends State<ChatPage> {
   final NavigationRoutes routes = NavigationRoutes();
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   String? profileUrl;
+  String? name;
 
   @override
   void initState() {
@@ -31,11 +32,34 @@ abstract class ChatPageModel extends State<ChatPage> {
     return completer.future;
   }
 
+  streamMessages() => firebaseFirestore
+      .collection("chats")
+      .doc(firebaseAuth.currentUser?.uid)
+      .collection('messages')
+      .doc(widget.uid)
+      .collection('chats')
+      .orderBy("date", descending: true)
+      .snapshots();
+
   initImage() async {
     String getProfileUrl = await getProfileImage();
+    String friendName = await getFriendName();
     setState(() {
       profileUrl = getProfileUrl;
+      name = friendName;
     });
+  }
+
+  Future<String> getFriendName() {
+    Completer<String> completer = Completer();
+
+    firebaseFirestore.collection("users").doc(widget.uid).get().then((value) {
+      if (value.exists) {
+        completer.complete((value.data() as Map)["name"]);
+      }
+    });
+
+    return completer.future;
   }
 
   sendOldMessage() async {
@@ -53,7 +77,7 @@ abstract class ChatPageModel extends State<ChatPage> {
       "date": DateTime.now()
     }).then((value) => {
               FirebaseFirestore.instance
-                  .collection("users")
+                  .collection("chats")
                   .doc(firebaseAuth.currentUser?.uid)
                   .collection("messages")
                   .doc(widget.uid)
@@ -75,7 +99,7 @@ abstract class ChatPageModel extends State<ChatPage> {
       "date": DateTime.now()
     }).then((value) => {
               FirebaseFirestore.instance
-                  .collection("users")
+                  .collection("chats")
                   .doc(widget.uid)
                   .collection("messages")
                   .doc(firebaseAuth.currentUser?.uid)
