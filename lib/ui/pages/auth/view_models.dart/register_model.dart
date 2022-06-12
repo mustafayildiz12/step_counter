@@ -4,6 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:step_counter/core/constants/texts.dart';
 import 'package:step_counter/core/manager/cache_manager.dart';
 import 'package:translator/translator.dart';
 
@@ -39,7 +40,7 @@ abstract class RegisterModel extends State<RegisterPage> {
           "name": name.text,
           "uid": firebaseAuth.currentUser?.uid,
           "date": DateTime.now(),
-          "profileUrl": "",
+          "profileUrl": AppTexts().profileUrl,
           "pass": password.text.trim(),
           "step": 0
         });

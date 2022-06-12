@@ -8,7 +8,7 @@ class AppTexts {
   final String lottiUrl2 =
       "https://assets7.lottiefiles.com/packages/lf20_kpx9c6si.json";
   final String profileUrl =
-      "https://floodhomesinc.com/wp-content/uploads/2016/12/male-profile-image-placeholder.png";
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Kemal_sunal.jpg/220px-Kemal_sunal.jpg";
   final String backImage =
       "https://i.pinimg.com/originals/30/59/8d/30598d2d0ecff7884fe04fdece3bf6e6.jpg";
 }

@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:step_counter/core/constants/texts.dart';
-import 'package:step_counter/ui/futures/save_user_info.dart';
 
 import '../../auth/views/login_page.dart';
 import '../view_models.dart/profile_page_model.dart';
@@ -38,10 +37,14 @@ class _ProfilePageState extends ProfilePageModel {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     pickedFile != null
-                        ? Image.file(
-                            File(pickedFile!.path!),
-                            width: 24.w,
-                            fit: BoxFit.cover,
+                        ? CircleAvatar(
+                            radius: 24.w,
+                            child: Image.file(
+                              File(pickedFile!.path!),
+                              width: 24.w,
+                              fit: BoxFit.cover,
+                            ),
+                            backgroundColor: Colors.transparent,
                           )
                         : CircleAvatar(
                             radius: 24.w,
@@ -118,9 +121,7 @@ class _ProfilePageState extends ProfilePageModel {
               height: 3.h,
             ),
             ListTile(
-              onTap: () {
-                routes.navigateToWidget(context, const SaveUserInfo());
-              },
+              onTap: () {},
               leading: Icon(
                 Icons.star_border,
                 size: 25.sp,
