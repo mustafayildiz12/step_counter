@@ -36,12 +36,15 @@ class _HomePageState extends HomePageModel {
                         // shape: const StadiumBorder(side: BorderSide()),
                         color: appColors.darkGreen,
                         child: ListTile(
-                            leading: CircleAvatar(
-                              radius: 8.w,
-                              backgroundImage: NetworkImage(
-                                  users?[index].profileUrl ??
-                                      AppTexts().profileUrl),
-                              backgroundColor: Colors.transparent,
+                            leading: Container(
+                              width: 13.w,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                          users?[index].profileUrl ??
+                                              AppTexts().profileUrl),
+                                      fit: BoxFit.fitHeight)),
                             ),
                             title: Text(
                               users?[index].name ?? 'user.name',

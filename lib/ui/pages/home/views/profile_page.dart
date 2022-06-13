@@ -56,6 +56,35 @@ class _ProfilePageState extends ProfilePageModel {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        pickedFile == null
+                            ? IconButton(
+                                onPressed: () {
+                                  selectImage();
+                                  setState(() {
+                                    isImageLoaded = !isImageLoaded;
+                                  });
+                                },
+                                icon: Icon(
+                                  Icons.select_all,
+                                  color: appColors.whiteColor,
+                                ),
+                              )
+                            : IconButton(
+                                onPressed: () async {
+                                  uploadFile();
+
+                                  setState(() {
+                                    isImageLoaded = !isImageLoaded;
+                                  });
+                                },
+                                icon: Icon(
+                                  !isImageLoaded
+                                      ? Icons.image_search
+                                      : Icons.upload,
+                                  color: appColors.whiteColor,
+                                ),
+                              )
+                        /*
                         Visibility(
                           visible: pickedFile != null ? true : false,
                           child: IconButton(
@@ -78,6 +107,7 @@ class _ProfilePageState extends ProfilePageModel {
                                 color: appColors.whiteColor,
                               )),
                         ),
+                        */
                       ],
                     ),
                   ]),

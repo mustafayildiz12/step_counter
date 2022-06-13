@@ -15,35 +15,35 @@ class _FriendListPageState extends FriendListModel {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          title: const Text("All Friends"),
+        ),
         body: StreamBuilder<List<UserModel>>(
-      stream: readUsers(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          var users = snapshot.data;
+          stream: readUsers(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var users = snapshot.data;
 
-          return ListView.builder(
-            itemCount: users?.length,
-            itemBuilder: (context, index) {
-              /*String? uid = users?[index].uid;
-              lastMessages.add(uidList);*/
-
-              return FriendList(
-                  users: users,
-                  uidList: lastMessages,
-                  index: index,
-                  last: last,
-                  voidCallback: getLastMessage);
-            },
-          );
-        }
-        if (snapshot.hasError) {
-          print(snapshot.error);
-        }
-        return Center(
-            child: CircularProgressIndicator(
-          color: appColors.whiteColor,
+              return ListView.builder(
+                itemCount: users?.length,
+                itemBuilder: (context, index) {
+                  return FriendList(
+                      users: users,
+                      uidList: lastMessages,
+                      index: index,
+                      last: last,
+                      voidCallback: getLastMessage);
+                },
+              );
+            }
+            if (snapshot.hasError) {
+              print(snapshot.error);
+            }
+            return Center(
+                child: CircularProgressIndicator(
+              color: appColors.whiteColor,
+            ));
+          },
         ));
-      },
-    ));
   }
 }

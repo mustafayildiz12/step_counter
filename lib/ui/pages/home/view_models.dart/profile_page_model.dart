@@ -26,6 +26,7 @@ abstract class ProfilePageModel extends State<ProfilePage> {
   PlatformFile? pickedFile;
   UploadTask? uploadTask;
   String? downloadUrl;
+  bool isImageLoaded = false;
 
   var logger = Logger();
 
@@ -39,14 +40,14 @@ abstract class ProfilePageModel extends State<ProfilePage> {
       uploadTask = ref.putFile(file);
     });
     final snapshot = await uploadTask!.whenComplete(() {
-      setState(() {
-        showMyDialog(context, "Güncellendi", "Profil fotoğrafınız güncellendi",
-            DialogType.SUCCES);
+      showMyDialog(context, "Güncellendi", "Profil fotoğrafınız güncellendi",
+              DialogType.SUCCES)
+          .then((_) {
+        setState(() {});
       });
     });
 
     final uploadedUrl = await snapshot.ref.getDownloadURL();
-    print(uploadedUrl);
 
     await firestore
         .collection("users")

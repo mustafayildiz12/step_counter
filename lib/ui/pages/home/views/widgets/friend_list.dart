@@ -39,25 +39,29 @@ class FriendList extends StatelessWidget {
         child: Card(
           color: AppColors().darkGreen,
           child: ListTile(
-            leading: CircleAvatar(
-              minRadius: 5.w,
-              maxRadius: 5.w,
-              backgroundImage: NetworkImage(
-                users?[index].profileUrl ?? AppTexts().profileUrl,
+            leading: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: Container(
+                width: 13.w,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: NetworkImage(
+                            users?[index].profileUrl ?? AppTexts().profileUrl),
+                        fit: BoxFit.fitHeight)),
               ),
-              backgroundColor: Colors.transparent,
             ),
             title: Text(
               users?[index].name ?? 'user.name',
               style: themeData.textTheme.bodyMedium
                   ?.copyWith(color: AppColors().whiteColor),
             ),
-            subtitle: FutureBuilder<String>(
+            trailing: FutureBuilder<String>(
               future: voidCallback(users?[index].uid),
               builder: (context, AsyncSnapshot<String> snapshot) {
                 if (snapshot.hasData) {
                   return Text(snapshot.data as String,
-                      style: themeData.textTheme.bodySmall
+                      style: themeData.textTheme.bodyMedium
                           ?.copyWith(color: AppColors().whiteColor));
                 } else if (snapshot.hasError) {
                   return Text(snapshot.error.toString());
